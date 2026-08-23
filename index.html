@@ -3,16 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>RiftCity Wire Bypass Prototype</title>
+<title>RiftCity Animated Wire Bypass</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 :root{
   color-scheme:dark;
-  --bg:#07090d;
+  --bg:#06080c;
   --panel:#0f141b;
   --panel2:#151c25;
   --border:#29333f;
@@ -31,17 +29,10 @@ html,body{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-body{
-  padding:12px;
-}
+body{padding:10px}
 
-button,select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
+button,select{font:inherit}
+button{cursor:pointer}
 
 .app{
   max-width:900px;
@@ -53,7 +44,7 @@ button{
   border:1px solid var(--border);
   border-radius:18px;
   overflow:hidden;
-  box-shadow:0 24px 70px rgba(0,0,0,.45);
+  box-shadow:0 24px 70px rgba(0,0,0,.48);
 }
 
 .header{
@@ -101,8 +92,7 @@ h1{
   background:#0a0e13;
 }
 
-select,
-.toolbar button{
+select,.toolbar button{
   min-height:42px;
   border-radius:10px;
   border:1px solid #34404d;
@@ -111,20 +101,27 @@ select,
   padding:8px 11px;
 }
 
-.toolbar button{
-  font-weight:800;
-}
+.toolbar button{font-weight:800}
 
-.game{
-  padding:14px;
-}
+.game{padding:14px}
 
 .safe{
   border:1px solid #2a3440;
   border-radius:16px;
-  background:
-    linear-gradient(145deg,#171e27,#0a0e13);
+  background:linear-gradient(145deg,#171e27,#0a0e13);
   padding:16px;
+  position:relative;
+  overflow:hidden;
+}
+
+.safe.powered{
+  animation:safePower .75s ease;
+}
+
+@keyframes safePower{
+  0%{box-shadow:0 0 0 rgba(160,255,190,0)}
+  40%{box-shadow:0 0 36px rgba(160,255,190,.28)}
+  100%{box-shadow:0 0 0 rgba(160,255,190,0)}
 }
 
 .safe-top{
@@ -160,13 +157,44 @@ select,
   font-size:11px;
 }
 
+.status-leds{
+  display:flex;
+  gap:7px;
+  margin-top:8px;
+}
+
+.led{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#28313b;
+  box-shadow:inset 0 0 0 1px #3a4552;
+}
+
+.led.on{
+  background:#9ff0b6;
+  box-shadow:
+    0 0 8px #9ff0b6,
+    0 0 16px rgba(159,240,182,.35);
+  animation:ledPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ledPulse{
+  0%,100%{opacity:.75}
+  50%{opacity:1}
+}
+
 .wire-board{
   position:relative;
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:90px;
   min-height:430px;
-  background:#080c11;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    #080c11;
+  background-size:26px 26px;
   border:1px solid #28323d;
   border-radius:14px;
   padding:18px;
@@ -178,7 +206,7 @@ select,
   flex-direction:column;
   justify-content:space-around;
   gap:10px;
-  z-index:2;
+  z-index:3;
 }
 
 .column.right{
@@ -199,26 +227,50 @@ select,
   transition:
     transform .12s ease,
     border-color .12s ease,
-    background .12s ease;
+    background .12s ease,
+    opacity .2s ease,
+    box-shadow .2s ease;
   color:white;
+  position:relative;
+  overflow:hidden;
 }
 
 .right .terminal{
   flex-direction:row-reverse;
 }
 
-.terminal:hover{
-  background:#18212c;
+.terminal.selected{
+  border-color:#f4f6f8;
+  transform:scale(1.03);
+  background:#1c2632;
+  box-shadow:0 0 16px rgba(255,255,255,.12);
+  animation:selectedPulse .9s ease-in-out infinite;
 }
 
-.terminal.selected{
-  border-color:white;
-  transform:scale(1.025);
-  background:#1c2632;
+@keyframes selectedPulse{
+  0%,100%{box-shadow:0 0 10px rgba(255,255,255,.08)}
+  50%{box-shadow:0 0 22px rgba(255,255,255,.24)}
 }
 
 .terminal.complete{
-  opacity:.5;
+  opacity:.58;
+  transform:scale(.985);
+}
+
+.terminal.complete::after{
+  content:"CONNECTED";
+  position:absolute;
+  right:8px;
+  bottom:4px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.1em;
+  color:#9ff0b6;
+}
+
+.right .terminal.complete::after{
+  left:8px;
+  right:auto;
 }
 
 .socket{
@@ -230,6 +282,25 @@ select,
   box-shadow:
     inset 0 0 0 3px rgba(0,0,0,.45),
     0 0 12px rgba(255,255,255,.08);
+  position:relative;
+}
+
+.socket::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+}
+
+.terminal.complete .socket{
+  animation:socketPower .8s ease;
+}
+
+@keyframes socketPower{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.35)}
+  100%{transform:scale(1)}
 }
 
 .wire-label{
@@ -249,7 +320,157 @@ select,
   width:100%;
   height:100%;
   pointer-events:none;
-  z-index:1;
+  z-index:2;
+}
+
+.wire-path{
+  fill:none;
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-dasharray:600;
+  stroke-dashoffset:600;
+  animation:
+    drawWire .45s ease forwards,
+    powerPulse .65s ease .45s;
+}
+
+@keyframes drawWire{
+  to{stroke-dashoffset:0}
+}
+
+@keyframes powerPulse{
+  0%,100%{
+    opacity:.9;
+    stroke-width:5;
+  }
+  50%{
+    opacity:1;
+    stroke-width:8;
+  }
+}
+
+.energy-pulse{
+  fill:none;
+  stroke:#fff;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:6 16;
+  opacity:0;
+  animation:energyTravel 1.2s linear .45s 2;
+}
+
+@keyframes energyTravel{
+  0%{
+    stroke-dashoffset:80;
+    opacity:0;
+  }
+  15%{opacity:.8}
+  85%{opacity:.8}
+  100%{
+    stroke-dashoffset:-80;
+    opacity:0;
+  }
+}
+
+.spark{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#fff;
+  pointer-events:none;
+  z-index:8;
+  box-shadow:
+    0 0 8px #fff,
+    0 0 14px #ffb366,
+    0 0 20px #ff5b5b;
+  animation:sparkOut .4s ease forwards;
+}
+
+@keyframes sparkOut{
+  0%{
+    transform:translate(0,0) scale(1);
+    opacity:1;
+  }
+  100%{
+    transform:translate(var(--x),var(--y)) scale(.1);
+    opacity:0;
+  }
+}
+
+.wrong{
+  animation:wrongShake .28s ease;
+  border-color:#b75f68!important;
+  box-shadow:0 0 20px rgba(255,80,80,.24);
+}
+
+@keyframes wrongShake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  50%{transform:translateX(6px)}
+  75%{transform:translateX(-4px)}
+  100%{transform:translateX(0)}
+}
+
+.panel-flicker{
+  animation:flicker .45s ease;
+}
+
+@keyframes flicker{
+  0%,100%{filter:brightness(1)}
+  30%{filter:brightness(1.65)}
+  50%{filter:brightness(.75)}
+  70%{filter:brightness(1.4)}
+}
+
+.unlock-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(5,10,8,.88);
+  z-index:20;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+
+.unlock-overlay.show{
+  opacity:1;
+}
+
+.unlock-box{
+  border:1px solid #4e6f59;
+  background:#0d1711;
+  border-radius:14px;
+  padding:20px 26px;
+  text-align:center;
+  transform:scale(.85);
+  opacity:0;
+}
+
+.unlock-overlay.show .unlock-box{
+  animation:unlockPop .45s ease forwards .15s;
+}
+
+@keyframes unlockPop{
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.unlock-title{
+  font-size:24px;
+  font-weight:950;
+  color:#9ff0b6;
+}
+
+.unlock-sub{
+  color:#a9b7ad;
+  font-size:12px;
+  margin-top:5px;
 }
 
 .actions{
@@ -276,30 +497,11 @@ select,
   font-size:13px;
 }
 
-.result.good{
-  color:var(--good);
-}
-
-.result.bad{
-  color:var(--bad);
-}
-
-.flash{
-  animation:flash .25s ease;
-}
-
-@keyframes flash{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-5px)}
-  50%{transform:translateX(5px)}
-  75%{transform:translateX(-3px)}
-  100%{transform:translateX(0)}
-}
+.result.good{color:var(--good)}
+.result.bad{color:var(--bad)}
 
 @media(max-width:680px){
-  body{
-    padding:7px;
-  }
+  body{padding:6px}
 
   .header,
   .safe-top{
@@ -340,138 +542,207 @@ select,
 <body>
 
 <main class="app">
-  <section class="panel">
 
-    <header class="header">
-      <div>
-        <div class="kicker">RIFTCITY CRIME PROTOTYPE</div>
-        <h1>Electronic Safe Bypass</h1>
-        <p>Match each circuit wire to its correct terminal.</p>
-      </div>
+<section class="panel">
 
-      <div class="build">WIRE TEST BUILD</div>
-    </header>
+<header class="header">
 
-    <div class="toolbar">
+<div>
+<div class="kicker">
+RIFTCITY CRIME PROTOTYPE
+</div>
 
-      <select id="difficulty">
-        <option value="easy">Easy — 3 wires</option>
-        <option value="normal" selected>Normal — 4 wires</option>
-        <option value="hard">Hard — 6 wires</option>
-      </select>
+<h1>
+Animated Electronic Safe Bypass
+</h1>
 
-      <button id="newSafe" type="button">
-        New Safe
-      </button>
+<p>
+Match the circuits and bring the access panel online.
+</p>
+</div>
 
-    </div>
+<div class="build">
+ANIMATED WIRE BUILD
+</div>
 
-    <div class="game">
+</header>
 
-      <section id="safe" class="safe">
+<div class="toolbar">
 
-        <div class="safe-top">
+<select id="difficulty">
 
-          <div>
-            <h2>Access Panel</h2>
-            <div class="sub">
-              Select a wire on the left, then connect it to the matching terminal.
-            </div>
-          </div>
+<option value="easy">
+Easy — 3 wires
+</option>
 
-          <div class="stats">
-            <div id="matchedChip" class="chip">
-              Matched 0 / 4
-            </div>
+<option value="normal" selected>
+Normal — 4 wires
+</option>
 
-            <div id="mistakeChip" class="chip">
-              Mistakes 0 / 3
-            </div>
-          </div>
+<option value="hard">
+Hard — 6 wires
+</option>
 
-        </div>
+</select>
 
-        <div id="board" class="wire-board">
+<button id="newSafe" type="button">
+New Safe
+</button>
 
-          <svg
-            id="svg"
-            class="svg-layer"
-            preserveAspectRatio="none">
-          </svg>
+</div>
 
-          <div id="leftColumn" class="column"></div>
+<div class="game">
 
-          <div id="rightColumn" class="column right"></div>
+<section id="safe" class="safe">
 
-        </div>
+<div class="safe-top">
 
-        <div class="actions">
-          <button
-            id="clearSelection"
-            class="reset-btn"
-            type="button">
-            Clear Selection
-          </button>
-        </div>
+<div>
 
-        <div
-          id="result"
-          class="result"
-          aria-live="polite">
-        </div>
+<h2>
+Access Panel
+</h2>
 
-      </section>
+<div class="sub">
+Select a circuit on the left, then tap its matching port.
+</div>
 
-    </div>
+<div id="leds" class="status-leds"></div>
 
-  </section>
+</div>
+
+<div class="stats">
+
+<div id="matchedChip" class="chip">
+Matched 0 / 4
+</div>
+
+<div id="mistakeChip" class="chip">
+Mistakes 0 / 3
+</div>
+
+</div>
+
+</div>
+
+<div id="board" class="wire-board">
+
+<svg
+id="svg"
+class="svg-layer"
+preserveAspectRatio="none">
+</svg>
+
+<div
+id="leftColumn"
+class="column">
+</div>
+
+<div
+id="rightColumn"
+class="column right">
+</div>
+
+</div>
+
+<div class="actions">
+
+<button
+id="clearSelection"
+class="reset-btn"
+type="button">
+Clear Selection
+</button>
+
+</div>
+
+<div
+id="result"
+class="result"
+aria-live="polite">
+</div>
+
+<div
+id="unlockOverlay"
+class="unlock-overlay">
+
+<div class="unlock-box">
+
+<div class="unlock-title">
+SAFE UNLOCKED
+</div>
+
+<div class="unlock-sub">
+Electronic bypass accepted.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</section>
+
 </main>
 
 <script>
 (() => {
 
-const $ = id => document.getElementById(id);
+const $ = id =>
+  document.getElementById(id);
 
 const COLORS = [
-  {
-    id: "red",
-    name: "Red",
-    color: "#e55353",
-    code: "A1"
-  },
-  {
-    id: "blue",
-    name: "Blue",
-    color: "#4e8fe8",
-    code: "B7"
-  },
-  {
-    id: "green",
-    name: "Green",
-    color: "#55b978",
-    code: "C4"
-  },
-  {
-    id: "yellow",
-    name: "Yellow",
-    color: "#d9b94b",
-    code: "D2"
-  },
-  {
-    id: "purple",
-    name: "Purple",
-    color: "#a672df",
-    code: "E8"
-  },
-  {
-    id: "orange",
-    name: "Orange",
-    color: "#d98547",
-    code: "F3"
-  }
+
+{
+  id:"red",
+  name:"Red",
+  color:"#e55353",
+  code:"A1"
+},
+
+{
+  id:"blue",
+  name:"Blue",
+  color:"#4e8fe8",
+  code:"B7"
+},
+
+{
+  id:"green",
+  name:"Green",
+  color:"#55b978",
+  code:"C4"
+},
+
+{
+  id:"yellow",
+  name:"Yellow",
+  color:"#d9b94b",
+  code:"D2"
+},
+
+{
+  id:"purple",
+  name:"Purple",
+  color:"#a672df",
+  code:"E8"
+},
+
+{
+  id:"orange",
+  name:"Orange",
+  color:"#d98547",
+  code:"F3"
+}
+
 ];
 
 let wires = [];
+
+let rightOrder = [];
 
 let selectedLeft = null;
 
@@ -481,13 +752,23 @@ let mistakes = 0;
 
 let locked = false;
 
-function shuffle(array) {
+function shuffle(array){
 
-  const result = [...array];
+  const result =
+    [...array];
 
-  for(let i = result.length - 1; i > 0; i--){
+  for(
+    let i =
+      result.length - 1;
+    i > 0;
+    i--
+  ){
 
-    const j = Math.floor(Math.random() * (i + 1));
+    const j =
+      Math.floor(
+        Math.random() *
+        (i + 1)
+      );
 
     [
       result[i],
@@ -505,13 +786,14 @@ function shuffle(array) {
 
 function getWireCount(){
 
-  const difficulty = $("difficulty").value;
+  const value =
+    $("difficulty").value;
 
-  if(difficulty === "easy"){
+  if(value === "easy"){
     return 3;
   }
 
-  if(difficulty === "hard"){
+  if(value === "hard"){
     return 6;
   }
 
@@ -521,13 +803,14 @@ function getWireCount(){
 
 function maxMistakes(){
 
-  const difficulty = $("difficulty").value;
+  const value =
+    $("difficulty").value;
 
-  if(difficulty === "easy"){
+  if(value === "easy"){
     return 99;
   }
 
-  if(difficulty === "hard"){
+  if(value === "hard"){
     return 2;
   }
 
@@ -541,117 +824,183 @@ function startGame(){
 
   selectedLeft = null;
 
-  matched.clear();
+  matched = new Set();
 
   mistakes = 0;
 
-  const count = getWireCount();
+  $("unlockOverlay")
+    .classList
+    .remove("show");
 
-  wires = COLORS.slice(0,count);
+  $("safe")
+    .classList
+    .remove("powered");
 
-  render();
+  const count =
+    getWireCount();
+
+  wires =
+    COLORS.slice(0,count);
+
+  rightOrder =
+    shuffle(wires);
+
+  renderTerminals();
+
+  renderLEDs();
+
+  updateUI();
+
+  drawConnections();
 
   setMessage("");
 
 }
 
-function render(){
+function renderTerminals(){
 
-  const left = $("leftColumn");
+  const left =
+    $("leftColumn");
 
-  const right = $("rightColumn");
+  const right =
+    $("rightColumn");
 
   left.innerHTML = "";
 
   right.innerHTML = "";
 
-  const shuffledRight = shuffle(wires);
+  wires.forEach(
+    wire => {
 
-  wires.forEach(wire => {
+      left.appendChild(
+        buildTerminal(
+          wire,
+          "left"
+        )
+      );
 
-    const button = document.createElement("button");
+    }
+  );
 
-    button.type = "button";
+  rightOrder.forEach(
+    wire => {
 
-    button.className = "terminal";
+      right.appendChild(
+        buildTerminal(
+          wire,
+          "right"
+        )
+      );
 
-    button.dataset.side = "left";
+    }
+  );
 
-    button.dataset.id = wire.id;
+}
 
-    button.innerHTML = `
-      <span
-        class="socket"
-        style="background:${wire.color}">
-      </span>
+function buildTerminal(
+  wire,
+  side
+){
 
-      <span>
-        <div class="wire-label">
-          ${wire.name} Wire
-        </div>
-
-        <div class="wire-code">
-          Circuit ${wire.code}
-        </div>
-      </span>
-    `;
-
-    button.addEventListener(
-      "click",
-      () => selectLeft(wire.id)
+  const button =
+    document.createElement(
+      "button"
     );
 
-    left.appendChild(button);
+  button.type =
+    "button";
 
-  });
+  button.className =
+    "terminal";
 
-  shuffledRight.forEach(wire => {
+  button.dataset.side =
+    side;
 
-    const button = document.createElement("button");
+  button.dataset.id =
+    wire.id;
 
-    button.type = "button";
+  button.innerHTML = `
 
-    button.className = "terminal";
+    <span
+      class="socket"
+      style="
+        background:
+        ${wire.color}
+      ">
+    </span>
 
-    button.dataset.side = "right";
+    <span>
 
-    button.dataset.id = wire.id;
+      <div
+        class="wire-label">
+        ${
+          side === "left"
+          ? wire.name + " Wire"
+          : wire.name + " Port"
+        }
+      </div>
 
-    button.innerHTML = `
-      <span
-        class="socket"
-        style="background:${wire.color}">
-      </span>
+      <div
+        class="wire-code">
+        ${
+          side === "left"
+          ? "Circuit"
+          : "Terminal"
+        }
+        ${wire.code}
+      </div>
 
-      <span>
-        <div class="wire-label">
-          ${wire.name} Port
-        </div>
+    </span>
 
-        <div class="wire-code">
-          Terminal ${wire.code}
-        </div>
-      </span>
-    `;
+  `;
 
-    button.addEventListener(
-      "click",
-      () => selectRight(wire.id)
-    );
+  button.addEventListener(
+    "click",
+    () => {
 
-    right.appendChild(button);
+      if(side === "left"){
 
-  });
+        selectLeft(
+          wire.id
+        );
 
-  updateUI();
+      }else{
 
-  requestAnimationFrame(drawConnections);
+        selectRight(
+          wire.id,
+          button
+        );
+
+      }
+
+    }
+  );
+
+  return button;
+
+}
+
+function renderLEDs(){
+
+  $("leds").innerHTML =
+    wires
+      .map(
+        wire =>
+          `<span
+             class="led"
+             data-led="${wire.id}">
+           </span>`
+      )
+      .join("");
 
 }
 
 function selectLeft(id){
 
-  if(locked || matched.has(id)){
+  if(
+    locked ||
+    matched.has(id)
+  ){
     return;
   }
 
@@ -661,7 +1010,10 @@ function selectLeft(id){
 
 }
 
-function selectRight(id){
+function selectRight(
+  id,
+  terminal
+){
 
   if(
     locked ||
@@ -671,11 +1023,23 @@ function selectRight(id){
     return;
   }
 
-  if(selectedLeft === id){
+  if(
+    selectedLeft === id
+  ){
 
-    matched.add(id);
+    const connectedId =
+      selectedLeft;
 
-    selectedLeft = null;
+    matched.add(
+      connectedId
+    );
+
+    selectedLeft =
+      null;
+
+    activateLED(
+      connectedId
+    );
 
     setMessage(
       "Circuit connected.",
@@ -685,21 +1049,23 @@ function selectRight(id){
     updateUI();
 
     requestAnimationFrame(
-      drawConnections
+      () => {
+
+        drawConnections(
+          connectedId
+        );
+
+      }
     );
 
-    if(matched.size === wires.length){
+    if(
+      matched.size ===
+      wires.length
+    ){
 
       locked = true;
 
-      setTimeout(() => {
-
-        setMessage(
-          "BYPASS COMPLETE — SAFE UNLOCKED",
-          true
-        );
-
-      },150);
+      completeSequence();
 
     }
 
@@ -710,20 +1076,25 @@ function selectRight(id){
 
   selectedLeft = null;
 
+  wrongAnimation(
+    terminal
+  );
+
+  sparkAtTerminal(
+    terminal
+  );
+
   setMessage(
     "Wrong terminal.",
     false
   );
 
-  $("safe").classList.remove("flash");
+  const max =
+    maxMistakes();
 
-  void $("safe").offsetWidth;
-
-  $("safe").classList.add("flash");
-
-  const max = maxMistakes();
-
-  if(mistakes >= max){
+  if(
+    mistakes >= max
+  ){
 
     locked = true;
 
@@ -738,42 +1109,357 @@ function selectRight(id){
 
 }
 
+function wrongAnimation(
+  terminal
+){
+
+  terminal
+    .classList
+    .remove("wrong");
+
+  void terminal.offsetWidth;
+
+  terminal
+    .classList
+    .add("wrong");
+
+  $("safe")
+    .classList
+    .remove("panel-flicker");
+
+  void $("safe").offsetWidth;
+
+  $("safe")
+    .classList
+    .add("panel-flicker");
+
+}
+
+function sparkAtTerminal(
+  terminal
+){
+
+  const board =
+    $("board");
+
+  const boardRect =
+    board
+      .getBoundingClientRect();
+
+  const rect =
+    terminal
+      .getBoundingClientRect();
+
+  const baseX =
+    rect.left +
+    rect.width / 2 -
+    boardRect.left;
+
+  const baseY =
+    rect.top +
+    rect.height / 2 -
+    boardRect.top;
+
+  for(
+    let i = 0;
+    i < 9;
+    i++
+  ){
+
+    const spark =
+      document.createElement(
+        "span"
+      );
+
+    spark.className =
+      "spark";
+
+    spark.style.left =
+      baseX + "px";
+
+    spark.style.top =
+      baseY + "px";
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+    const distance =
+      25 +
+      Math.random() *
+      30;
+
+    spark.style
+      .setProperty(
+        "--x",
+        Math.cos(angle) *
+        distance +
+        "px"
+      );
+
+    spark.style
+      .setProperty(
+        "--y",
+        Math.sin(angle) *
+        distance +
+        "px"
+      );
+
+    board.appendChild(
+      spark
+    );
+
+    setTimeout(
+      () =>
+        spark.remove(),
+      450
+    );
+
+  }
+
+}
+
+function activateLED(id){
+
+  const led =
+    document.querySelector(
+      `[data-led="${id}"]`
+    );
+
+  if(led){
+    led.classList.add("on");
+  }
+
+}
+
 function updateUI(){
 
   document
-    .querySelectorAll(".terminal")
-    .forEach(button => {
+    .querySelectorAll(
+      ".terminal"
+    )
+    .forEach(
+      button => {
 
-      const id = button.dataset.id;
+        const id =
+          button.dataset.id;
 
-      const side = button.dataset.side;
+        const side =
+          button.dataset.side;
 
-      button.classList.toggle(
-        "complete",
-        matched.has(id)
-      );
+        button
+          .classList
+          .toggle(
+            "complete",
+            matched.has(id)
+          );
 
-      button.classList.toggle(
-        "selected",
-        side === "left" &&
-        selectedLeft === id
-      );
+        button
+          .classList
+          .toggle(
+            "selected",
+            side === "left" &&
+            selectedLeft === id
+          );
 
-      button.disabled =
-        locked ||
-        matched.has(id);
+        button.disabled =
+          locked ||
+          matched.has(id);
 
-    });
+      }
+    );
 
-  $("matchedChip").textContent =
-    `Matched ${matched.size} / ${wires.length}`;
+  $("matchedChip")
+    .textContent =
+      `Matched ${matched.size} / ${wires.length}`;
 
-  const max = maxMistakes();
+  const max =
+    maxMistakes();
 
-  $("mistakeChip").textContent =
-    max > 50
+  $("mistakeChip")
+    .textContent =
+      max > 50
       ? `Mistakes ${mistakes}`
       : `Mistakes ${mistakes} / ${max}`;
+
+}
+
+function drawConnections(
+  newestId = null
+){
+
+  const svg =
+    $("svg");
+
+  const board =
+    $("board");
+
+  const boardRect =
+    board
+      .getBoundingClientRect();
+
+  svg.innerHTML = "";
+
+  matched.forEach(
+    id => {
+
+      const left =
+        document.querySelector(
+          `[data-side="left"][data-id="${id}"]`
+        );
+
+      const right =
+        document.querySelector(
+          `[data-side="right"][data-id="${id}"]`
+        );
+
+      if(
+        !left ||
+        !right
+      ){
+        return;
+      }
+
+      const wire =
+        wires.find(
+          w =>
+            w.id === id
+        );
+
+      const lr =
+        left
+          .getBoundingClientRect();
+
+      const rr =
+        right
+          .getBoundingClientRect();
+
+      const x1 =
+        lr.right -
+        boardRect.left;
+
+      const y1 =
+        lr.top +
+        lr.height / 2 -
+        boardRect.top;
+
+      const x2 =
+        rr.left -
+        boardRect.left;
+
+      const y2 =
+        rr.top +
+        rr.height / 2 -
+        boardRect.top;
+
+      const mid =
+        (x1 + x2) / 2;
+
+      const pathData =
+        `M ${x1} ${y1}
+         C ${mid} ${y1},
+           ${mid} ${y2},
+           ${x2} ${y2}`;
+
+      const path =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path"
+        );
+
+      path.setAttribute(
+        "d",
+        pathData
+      );
+
+      path.setAttribute(
+        "stroke",
+        wire.color
+      );
+
+      path.classList.add(
+        "wire-path"
+      );
+
+      path.style.filter =
+        `drop-shadow(
+          0 0 5px
+          ${wire.color}
+        )`;
+
+      svg.appendChild(
+        path
+      );
+
+      if(
+        id === newestId
+      ){
+
+        const pulse =
+          document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+          );
+
+        pulse.setAttribute(
+          "d",
+          pathData
+        );
+
+        pulse.classList.add(
+          "energy-pulse"
+        );
+
+        svg.appendChild(
+          pulse
+        );
+
+      }
+
+    }
+  );
+
+}
+
+function completeSequence(){
+
+  setMessage(
+    "All circuits online...",
+    true
+  );
+
+  $("safe")
+    .classList
+    .add(
+      "panel-flicker"
+    );
+
+  setTimeout(
+    () => {
+
+      $("safe")
+        .classList
+        .add(
+          "powered"
+        );
+
+    },
+    250
+  );
+
+  setTimeout(
+    () => {
+
+      $("unlockOverlay")
+        .classList
+        .add(
+          "show"
+        );
+
+    },
+    650
+  );
 
 }
 
@@ -782,153 +1468,63 @@ function setMessage(
   good = null
 ){
 
-  const element = $("result");
+  const element =
+    $("result");
 
-  element.textContent = message;
+  element.textContent =
+    message;
 
-  element.className = "result";
+  element.className =
+    "result";
 
   if(good === true){
-    element.classList.add("good");
+    element
+      .classList
+      .add("good");
   }
 
   if(good === false){
-    element.classList.add("bad");
+    element
+      .classList
+      .add("bad");
   }
 
 }
 
-function drawConnections(){
+$("newSafe")
+  .addEventListener(
+    "click",
+    startGame
+  );
 
-  const svg = $("svg");
+$("difficulty")
+  .addEventListener(
+    "change",
+    startGame
+  );
 
-  const board = $("board");
+$("clearSelection")
+  .addEventListener(
+    "click",
+    () => {
 
-  const boardRect =
-    board.getBoundingClientRect();
+      selectedLeft =
+        null;
 
-  svg.innerHTML = "";
+      updateUI();
 
-  matched.forEach(id => {
-
-    const left =
-      document.querySelector(
-        `[data-side="left"][data-id="${id}"]`
-      );
-
-    const right =
-      document.querySelector(
-        `[data-side="right"][data-id="${id}"]`
-      );
-
-    if(!left || !right){
-      return;
     }
+  );
 
-    const leftRect =
-      left.getBoundingClientRect();
-
-    const rightRect =
-      right.getBoundingClientRect();
-
-    const wire =
-      wires.find(
-        wire => wire.id === id
-      );
-
-    const x1 =
-      leftRect.right -
-      boardRect.left;
-
-    const y1 =
-      leftRect.top +
-      leftRect.height / 2 -
-      boardRect.top;
-
-    const x2 =
-      rightRect.left -
-      boardRect.left;
-
-    const y2 =
-      rightRect.top +
-      rightRect.height / 2 -
-      boardRect.top;
-
-    const mid =
-      (x1 + x2) / 2;
-
-    const path =
-      document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path"
-      );
-
-    path.setAttribute(
-      "d",
-      `M ${x1} ${y1}
-       C ${mid} ${y1},
-         ${mid} ${y2},
-         ${x2} ${y2}`
-    );
-
-    path.setAttribute(
-      "fill",
-      "none"
-    );
-
-    path.setAttribute(
-      "stroke",
-      wire.color
-    );
-
-    path.setAttribute(
-      "stroke-width",
-      "5"
-    );
-
-    path.setAttribute(
-      "stroke-linecap",
-      "round"
-    );
-
-    path.style.filter =
-      `drop-shadow(
-        0 0 5px ${wire.color}
-      )`;
-
-    svg.appendChild(path);
-
-  });
-
-}
-
-$("newSafe").addEventListener(
-  "click",
-  startGame
-);
-
-$("difficulty").addEventListener(
-  "change",
-  startGame
-);
-
-$("clearSelection").addEventListener(
-  "click",
-  () => {
-
-    selectedLeft = null;
-
-    updateUI();
-
-  }
-);
-
-window.addEventListener(
-  "resize",
-  () => requestAnimationFrame(
-    drawConnections
-  )
-);
+window
+  .addEventListener(
+    "resize",
+    () =>
+      requestAnimationFrame(
+        () =>
+          drawConnections()
+      )
+  );
 
 startGame();
 
