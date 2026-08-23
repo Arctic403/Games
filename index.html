@@ -4,1933 +4,240 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>RiftCity Circuit Safe</title>
-
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
+:root{color-scheme:dark;--good:#9df0b6;--bad:#ff8f8f}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top,#102019,#060b08 52%,#030503);color:#f4f7fa}
+body{padding:8px}
+button,select{font:inherit}
+button{cursor:pointer}
+.app{width:min(100%,820px);margin:auto}
+.shell{background:#07100c;border:1px solid #315541;border-radius:18px;overflow:hidden;box-shadow:0 24px 70px #0009}
+.header{padding:13px 14px;border-bottom:1px solid #294a39;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;background:#0b1711}
+.kicker{font-size:9px;letter-spacing:.15em;font-weight:900;color:#7f978a}
+.header h1{margin:3px 0 4px;font-size:19px}
+.header p{margin:0;font-size:11px;color:#91a69a}
+.toolbar{display:flex;gap:7px;padding:9px;border-bottom:1px solid #294a39}
+select,.toolbar button,.clear{min-height:40px;border:1px solid #385848;background:#0e1b15;color:white;border-radius:9px;padding:7px 10px}
+select{flex:1}
+.toolbar button,.clear{font-weight:800}
+.game{padding:9px}
+.safe{position:relative;padding:10px;border-radius:15px;border:2px solid #3c654f;background:#08120d;overflow:hidden;box-shadow:inset 0 0 35px #0009}
+.safe.shorting{animation:shortBoard .16s linear 7}
+@keyframes shortBoard{50%{border-color:#ff4242;filter:brightness(1.35) saturate(1.45);box-shadow:inset 0 0 55px #ff000050,0 0 25px #ff00003d}}
+.safeHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:8px;position:relative;z-index:6}
+.title{font-weight:900;font-size:13px}
+.sub{font-size:10px;color:#8ea497;margin-top:2px}
+.hud{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.chip{min-width:66px;text-align:center;padding:6px 7px;border-radius:999px;border:1px solid #395748;background:#07110d;font-size:10px}
+.timer{font-weight:950}
+.timer.warning{color:#ffd26d}
+.timer.danger{color:#ff8686;animation:pulse .45s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4}}
+.leds{display:flex;gap:5px;margin-top:6px}
+.led{width:8px;height:8px;border-radius:50%;background:#153326;box-shadow:inset 0 0 0 1px #315a45}
+.led.on{background:#79f19b;box-shadow:0 0 7px #79f19b,0 0 13px #79f19b77}
 
-:root{
-  color-scheme:dark;
-  --text:#f4f7fa;
-  --muted:#94a0ad;
-  --good:#9df0b6;
-  --bad:#ff8f8f;
-}
-
-html,body{
-  margin:0;
-  min-height:100%;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:
-    radial-gradient(circle at top,#12221d,#07100d 48%,#040807);
-  color:var(--text);
-}
-
-body{
-  padding:8px;
-}
-
-button,select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.app{
-  width:min(100%,850px);
-  margin:auto;
-}
-
-.shell{
-  border:1px solid #29483c;
-  border-radius:18px;
-  overflow:hidden;
-  background:#08110e;
-  box-shadow:0 24px 70px #0009;
-}
-
-.header{
-  padding:13px;
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  border-bottom:1px solid #29483c;
-  background:#0c1713;
-}
-
-.kicker{
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.15em;
-  color:#789187;
-}
-
-.header h1{
-  margin:3px 0;
-  font-size:19px;
-}
-
-.header p{
-  margin:0;
-  font-size:11px;
-  color:#93a89f;
-}
-
-.toolbar{
-  display:flex;
-  gap:7px;
-  padding:9px;
-  border-bottom:1px solid #29483c;
-}
-
-select,
-.toolbar button{
-  min-height:40px;
-  border-radius:9px;
-  border:1px solid #375348;
-  background:#0e1b17;
-  color:white;
-  padding:7px 10px;
-}
-
-.toolbar select{
-  flex:1;
-}
-
-.toolbar button{
-  font-weight:800;
-}
-
-.game{
-  padding:9px;
-}
-
-.safe{
-  position:relative;
-  padding:12px;
-  border-radius:15px;
-  border:2px solid #355f4d;
-
-  background:
-    radial-gradient(circle at 50% 45%,rgba(18,80,55,.18),transparent 40%),
-    linear-gradient(90deg,transparent 49.5%,rgba(213,171,70,.08) 50%,transparent 50.5%),
-    linear-gradient(rgba(213,171,70,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(213,171,70,.035) 1px,transparent 1px),
-    #092017;
-
-  background-size:
-    auto,
-    auto,
-    24px 24px,
-    24px 24px,
-    auto;
-
-  overflow:hidden;
-
-  box-shadow:
-    inset 0 0 35px #0008,
-    inset 0 0 0 1px #173d2c;
-}
-
-.safe::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-
-  background:
-    linear-gradient(
-      115deg,
-      transparent 0 16%,
-      rgba(217,174,73,.08) 16.3% 16.7%,
-      transparent 17% 33%,
-      rgba(217,174,73,.07) 33.3% 33.7%,
-      transparent 34% 64%,
-      rgba(217,174,73,.06) 64.3% 64.7%,
-      transparent 65%
-    );
-}
-
-.safe.shorting{
-  animation:shortBoard .18s linear 6;
-}
-
-@keyframes shortBoard{
-  0%,100%{
-    border-color:#355f4d;
-    filter:brightness(1);
-  }
-
-  50%{
-    border-color:#ff3838;
-    filter:
-      brightness(1.35)
-      saturate(1.4);
-    box-shadow:
-      inset 0 0 50px rgba(255,0,0,.32),
-      0 0 28px rgba(255,0,0,.25);
-  }
-}
-
-/* top HUD */
-
-.safe-head{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  margin-bottom:9px;
-  position:relative;
-  z-index:4;
-}
-
-.safe-title{
-  font-weight:900;
-  font-size:14px;
-}
-
-.subtitle{
-  font-size:10px;
-  color:#8fa39a;
-  margin-top:2px;
-}
-
-.hud{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-
-.chip{
-  min-width:72px;
-  text-align:center;
-  padding:6px 8px;
-  border-radius:999px;
-  border:1px solid #385347;
-  background:#08130f;
-  font-size:10px;
-}
-
-.timer{
-  font-weight:950;
-  letter-spacing:.04em;
-}
-
-.timer.warning{
-  color:#ffd273;
-}
-
-.timer.danger{
-  color:#ff8585;
-  animation:timerPulse .45s ease-in-out infinite;
-}
-
-@keyframes timerPulse{
-  50%{
-    opacity:.45;
-  }
-}
-
-/* circuit LEDs */
-
-.leds{
-  display:flex;
-  gap:5px;
-  margin-top:6px;
-}
-
-.led{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#173528;
-  box-shadow:inset 0 0 0 1px #315847;
-}
-
-.led.on{
-  background:#7cf4a0;
-
-  box-shadow:
-    0 0 7px #7cf4a0,
-    0 0 13px #7cf4a066;
-}
-
-/* board */
-
+/* PCB art is the actual playfield background */
 .board{
   position:relative;
-
   display:grid;
   grid-template-columns:1fr 1fr;
-
   gap:34px;
-
-  min-height:330px;
-
-  border:1px solid #2a5b45;
-  border-radius:13px;
-
-  padding:10px;
-
-  background:
-    radial-gradient(circle at 50% 50%,#0b2c20 0,#071a13 70%);
-
+  min-height:350px;
+  padding:28px 16px 24px;
+  border-radius:14px;
   overflow:hidden;
-}
-
-.trace-layer{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.55;
-
   background:
-    linear-gradient(
-      90deg,
-      transparent 12%,
-      #b8893330 12.4%,
-      transparent 12.8%,
-      transparent 87%,
-      #b8893330 87.4%,
-      transparent 87.8%
-    );
+    linear-gradient(rgba(2,10,6,.27),rgba(2,10,6,.27)),
+    url("circuit-board.png") center/100% 100% no-repeat,
+    #082016;
 }
-
-.column{
-  z-index:4;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:space-evenly;
-
-  gap:7px;
+.board::after{
+  content:"";
+  position:absolute;inset:0;
+  background:radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.2) 100%);
+  pointer-events:none;
+  z-index:1;
 }
-
-.column.right{
-  align-items:flex-end;
-}
-
-/* terminals */
-
+.column{position:relative;z-index:4;display:flex;flex-direction:column;justify-content:space-evenly;gap:6px}
+.column.right{align-items:flex-end}
 .terminal{
-  width:100%;
-  max-width:210px;
-
-  min-height:44px;
-
-  border:1px solid #365a4a;
-  border-radius:10px;
-
-  padding:6px 8px;
-
-  display:flex;
-  gap:8px;
-  align-items:center;
-
+  width:100%;max-width:185px;min-height:44px;
+  display:flex;align-items:center;gap:8px;
+  padding:6px 8px;border-radius:10px;
+  border:1px solid #476454;
+  background:linear-gradient(145deg,rgba(11,25,19,.91),rgba(5,15,10,.94));
   color:white;
-
-  background:
-    linear-gradient(145deg,#11231d,#091610);
-
-  transition:
-    transform .12s ease,
-    opacity .15s ease,
-    border-color .12s ease,
-    box-shadow .12s ease;
+  box-shadow:0 5px 16px #0005;
+  transition:transform .12s,border-color .12s,box-shadow .12s,opacity .15s
 }
-
-.column.right .terminal{
-  flex-direction:row-reverse;
-}
-
-.terminal.selected{
-  transform:scale(1.03);
-
-  border-color:#e8f6ef;
-
-  box-shadow:
-    0 0 12px #ffffff22,
-    inset 0 0 10px #ffffff0d;
-
-  animation:selectedPulse .75s ease-in-out infinite;
-}
-
-@keyframes selectedPulse{
-  50%{
-    box-shadow:
-      0 0 22px #ffffff35;
-  }
-}
-
-.terminal.complete{
-  opacity:.54;
-}
-
-.terminal:disabled{
-  cursor:default;
-}
-
-.socket{
-  flex:0 0 auto;
-
-  width:19px;
-  height:19px;
-
-  border-radius:50%;
-
-  border:3px solid #f0f5f0aa;
-
-  box-shadow:
-    inset 0 0 0 3px #0008,
-    0 0 7px currentColor;
-}
-
-.label{
-  min-width:0;
-}
-
-.name{
-  font-size:11px;
-  line-height:1.05;
-  font-weight:900;
-}
-
-.code{
-  font-size:9px;
-  color:#849a90;
-  margin-top:2px;
-}
-
-/* SVG wires */
-
-.wires{
-  position:absolute;
-  inset:0;
-
-  width:100%;
-  height:100%;
-
-  pointer-events:none;
-
-  z-index:3;
-}
-
-.wire{
-  fill:none;
-  stroke-width:5;
-  stroke-linecap:round;
-
-  stroke-dasharray:600;
-  stroke-dashoffset:600;
-
-  animation:
-    drawWire .4s ease forwards,
-    wireCharge .7s ease .4s;
-}
-
-@keyframes drawWire{
-  to{
-    stroke-dashoffset:0;
-  }
-}
-
-@keyframes wireCharge{
-  50%{
-    stroke-width:8;
-    filter:brightness(1.7);
-  }
-}
-
-.power{
-  fill:none;
-  stroke:#fff;
-
-  stroke-width:2;
-
-  stroke-dasharray:5 16;
-
-  opacity:0;
-
-  animation:
-    travel .95s linear .35s 2;
-}
-
-@keyframes travel{
-  0%{
-    stroke-dashoffset:70;
-    opacity:0;
-  }
-
-  15%{
-    opacity:.9;
-  }
-
-  85%{
-    opacity:.9;
-  }
-
-  100%{
-    stroke-dashoffset:-70;
-    opacity:0;
-  }
-}
-
-/* short overlay */
-
-.short-overlay{
-  position:absolute;
-  inset:0;
-
-  z-index:20;
-
-  background:rgba(180,0,0,.18);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  opacity:0;
-  pointer-events:none;
-}
-
-.short-overlay.show{
-  opacity:1;
-
-  animation:
-    redBlink .15s linear infinite;
-}
-
-@keyframes redBlink{
-  50%{
-    background:rgba(255,0,0,.38);
-  }
-}
-
-.short-message{
-  padding:10px 16px;
-
-  border:1px solid #ff6b6b;
-
-  border-radius:10px;
-
-  background:#300909dd;
-
-  font-weight:950;
-
-  letter-spacing:.08em;
-
-  color:#ffb1b1;
-
-  transform:scale(.9);
-}
-
-.short-overlay.show .short-message{
-  animation:shortText .2s ease forwards;
-}
-
-@keyframes shortText{
-  to{
-    transform:scale(1);
-  }
-}
-
-/* sparks */
-
-.spark{
-  position:absolute;
-
-  width:5px;
-  height:5px;
-
-  border-radius:50%;
-
-  background:white;
-
-  z-index:25;
-
-  pointer-events:none;
-
-  box-shadow:
-    0 0 7px white,
-    0 0 12px #ff4433;
-
-  animation:spark .45s ease-out forwards;
-}
-
-@keyframes spark{
-  to{
-    transform:
-      translate(var(--x),var(--y))
-      scale(.1);
-
-    opacity:0;
-  }
-}
-
-/* actions */
-
-.actions{
-  display:flex;
-  justify-content:center;
-
-  margin-top:9px;
-}
-
-.clear{
-  min-height:40px;
-
-  padding:7px 12px;
-
-  border-radius:9px;
-
-  border:1px solid #355447;
-
-  background:#0d1b16;
-
-  color:white;
-
-  font-weight:800;
-}
-
-.result{
-  min-height:29px;
-
-  text-align:center;
-
-  margin-top:7px;
-
-  font-size:11px;
-
-  font-weight:900;
-}
-
-.result.good{
-  color:var(--good);
-}
-
-.result.bad{
-  color:var(--bad);
-}
-
-/* success */
-
-.unlock{
-  position:absolute;
-  inset:0;
-
-  z-index:30;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:#041109e8;
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:opacity .25s ease;
-}
-
-.unlock.show{
-  opacity:1;
-}
-
-.unlock-box{
-  padding:18px 22px;
-
-  border:1px solid #4a8864;
-
-  border-radius:13px;
-
-  background:#092015;
-
-  text-align:center;
-
-  transform:scale(.8);
-}
-
-.unlock.show .unlock-box{
-  animation:unlock .4s ease forwards;
-}
-
-@keyframes unlock{
-  to{
-    transform:scale(1);
-  }
-}
-
-.unlock-title{
-  color:#a4f5ba;
-
-  font-size:22px;
-
-  font-weight:950;
-}
-
-.unlock-sub{
-  margin-top:4px;
-
-  font-size:10px;
-
-  color:#8ba596;
-}
-
-/* compact hard layout */
-
-.safe.hard .board{
-  min-height:365px;
-}
-
-.safe.hard .terminal{
-  min-height:42px;
-  padding:5px 7px;
-}
-
-.safe.hard .column{
-  gap:4px;
-}
-
-.safe.hard .name{
-  font-size:10px;
-}
-
-.safe.hard .code{
-  font-size:8px;
-}
-
+.column.right .terminal{flex-direction:row-reverse}
+.terminal.selected{transform:scale(1.03);border-color:#f1f6f3;box-shadow:0 0 17px #ffffff28;animation:selected .75s ease-in-out infinite}
+@keyframes selected{50%{box-shadow:0 0 25px #ffffff40}}
+.terminal.complete{opacity:.5}
+.socket{flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:3px solid #fff9;box-shadow:inset 0 0 0 3px #0009,0 0 8px currentColor}
+.name{font-size:11px;line-height:1;font-weight:900}.code{font-size:8px;color:#8da097;margin-top:2px}
+.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.wire{fill:none;stroke-width:5;stroke-linecap:round;stroke-dasharray:600;stroke-dashoffset:600;animation:draw .4s ease forwards,charge .7s ease .4s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes charge{50%{stroke-width:8;filter:brightness(1.7)}}
+.power{fill:none;stroke:#fff;stroke-width:2;stroke-dasharray:5 16;opacity:0;animation:travel .95s linear .35s 2}
+@keyframes travel{0%{stroke-dashoffset:70;opacity:0}15%,85%{opacity:.9}100%{stroke-dashoffset:-70;opacity:0}}
+.shortOverlay,.unlock{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none}
+.shortOverlay{background:#b000002c}.shortOverlay.show{opacity:1;animation:redblink .15s linear infinite}
+@keyframes redblink{50%{background:#ff00005d}}
+.shortMsg{padding:10px 15px;border:1px solid #ff6c6c;background:#320909e8;border-radius:10px;color:#ffb5b5;font-weight:950;letter-spacing:.07em}
+.unlock{z-index:30;background:#041109e8;transition:opacity .25s}
+.unlock.show{opacity:1}.unlockBox{padding:18px 22px;border:1px solid #4d8965;background:#092015;border-radius:13px;text-align:center;transform:scale(.82)}
+.unlock.show .unlockBox{animation:unlock .4s ease forwards}
+@keyframes unlock{to{transform:scale(1)}}
+.unlockTitle{font-size:22px;font-weight:950;color:#a3f5ba}.unlockSub{font-size:10px;color:#8aa496;margin-top:4px}
+.spark{position:absolute;width:5px;height:5px;border-radius:50%;background:white;z-index:25;pointer-events:none;box-shadow:0 0 7px white,0 0 12px #ff4433;animation:spark .45s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--x),var(--y)) scale(.1);opacity:0}}
+.actions{display:flex;justify-content:center;margin-top:8px}.clear{font-weight:800}
+.result{min-height:28px;text-align:center;margin-top:6px;font-size:11px;font-weight:900}.result.good{color:var(--good)}.result.bad{color:var(--bad)}
+.safe.hard .board{min-height:375px;padding-top:20px;padding-bottom:20px}.safe.hard .terminal{min-height:40px;padding:4px 6px}.safe.hard .column{gap:3px}.safe.hard .name{font-size:10px}
 @media(max-width:600px){
-
-  .header{
-    flex-direction:column;
-  }
-
-  .safe-head{
-    flex-direction:column;
-  }
-
-  .hud{
-    justify-content:flex-start;
-  }
-
-  .board{
-    gap:20px;
-    padding:7px;
-    min-height:310px;
-  }
-
-  .terminal{
-    padding:5px 6px;
-  }
-
-  .safe.hard .board{
-    min-height:345px;
-  }
+  .header,.safeHead{flex-direction:column}
+  .hud{justify-content:flex-start}
+  .board{gap:18px;min-height:330px;padding:24px 8px 20px}
+  .terminal{max-width:155px;min-height:42px;padding:5px 6px}
+  .socket{width:18px;height:18px}.name{font-size:10px}.code{font-size:8px}
+  .safe.hard .board{min-height:355px;padding-top:15px;padding-bottom:15px}
 }
 </style>
 </head>
-
 <body>
-
 <main class="app">
-
 <section class="shell">
-
 <header class="header">
-
-<div>
-
-<div class="kicker">
-RIFTCITY SAFE BYPASS
-</div>
-
-<h1>
-Circuit Wire Match
-</h1>
-
-<p>
-Match every circuit before the bypass window closes.
-</p>
-
-</div>
-
+<div><div class="kicker">RIFTCITY SAFE BYPASS</div><h1>Circuit Wire Match</h1><p>Match every circuit before the bypass window closes.</p></div>
 </header>
 
 <div class="toolbar">
-
 <select id="difficulty">
-
-<option value="easy">
-Easy — 3 wires
-</option>
-
-<option value="normal" selected>
-Normal — 4 wires
-</option>
-
-<option value="hard">
-Hard — 6 wires
-</option>
-
+<option value="easy">Easy — 3 wires</option>
+<option value="normal" selected>Normal — 4 wires</option>
+<option value="hard">Hard — 6 wires</option>
 </select>
-
-<button
-id="newSafe"
-type="button">
-New Safe
-</button>
-
+<button id="newSafe" type="button">New Safe</button>
 </div>
 
 <div class="game">
-
-<section
-id="safe"
-class="safe">
-
-<div class="safe-head">
-
+<section id="safe" class="safe">
+<div class="safeHead">
 <div>
-
-<div class="safe-title">
-ACCESS CIRCUIT
+<div class="title">ACCESS CIRCUIT</div>
+<div class="sub">Tap a wire, then its matching port.</div>
+<div id="leds" class="leds"></div>
 </div>
-
-<div class="subtitle">
-Tap a wire, then its matching port.
-</div>
-
-<div
-id="leds"
-class="leds">
-</div>
-
-</div>
-
 <div class="hud">
-
-<div
-id="timer"
-class="chip timer">
-00:24
+<div id="timer" class="chip timer">24.0s</div>
+<div id="matched" class="chip">0 / 4</div>
+<div id="mistakes" class="chip">0 / 3</div>
+</div>
 </div>
 
-<div
-id="matched"
-class="chip">
-0 / 4
+<div id="board" class="board">
+<svg id="svg" class="wires"></svg>
+<div id="left" class="column"></div>
+<div id="right" class="column right"></div>
 </div>
 
-<div
-id="mistakes"
-class="chip">
-0 / 3
-</div>
+<div class="actions"><button id="clear" class="clear" type="button">Clear Selection</button></div>
+<div id="result" class="result" aria-live="polite"></div>
 
-</div>
-
-</div>
-
-<div
-id="board"
-class="board">
-
-<div class="trace-layer">
-</div>
-
-<svg
-id="svg"
-class="wires">
-</svg>
-
-<div
-id="left"
-class="column">
-</div>
-
-<div
-id="right"
-class="column right">
-</div>
-
-</div>
-
-<div class="actions">
-
-<button
-id="clear"
-class="clear"
-type="button">
-Clear Selection
-</button>
-
-</div>
-
-<div
-id="result"
-class="result"
-aria-live="polite">
-</div>
-
-<div
-id="shortOverlay"
-class="short-overlay">
-
-<div class="short-message">
-CIRCUIT SHORT
-</div>
-
-</div>
-
-<div
-id="unlock"
-class="unlock">
-
-<div class="unlock-box">
-
-<div class="unlock-title">
-SAFE UNLOCKED
-</div>
-
-<div class="unlock-sub">
-Electronic bypass complete
-</div>
-
-</div>
-
-</div>
-
+<div id="shortOverlay" class="shortOverlay"><div class="shortMsg">CIRCUIT SHORT</div></div>
+<div id="unlock" class="unlock"><div class="unlockBox"><div class="unlockTitle">SAFE UNLOCKED</div><div class="unlockSub">Electronic bypass complete</div></div></div>
 </section>
-
 </div>
-
 </section>
-
 </main>
 
 <script>
-(() => {
-
-const $ =
-  id =>
-    document.getElementById(id);
-
-const WIRES = [
-
-{
-  id:"red",
-  name:"Red",
-  color:"#ee5555",
-  code:"A1"
-},
-
-{
-  id:"blue",
-  name:"Blue",
-  color:"#52a1ff",
-  code:"B7"
-},
-
-{
-  id:"green",
-  name:"Green",
-  color:"#5bd982",
-  code:"C4"
-},
-
-{
-  id:"yellow",
-  name:"Yellow",
-  color:"#e4c34f",
-  code:"D2"
-},
-
-{
-  id:"purple",
-  name:"Purple",
-  color:"#ad77e8",
-  code:"E8"
-},
-
-{
-  id:"orange",
-  name:"Orange",
-  color:"#e98b47",
-  code:"F3"
-}
-
+(()=>{
+const $=id=>document.getElementById(id);
+const WIRES=[
+{id:"red",name:"Red",color:"#ee5555",code:"A1"},
+{id:"blue",name:"Blue",color:"#52a1ff",code:"B7"},
+{id:"green",name:"Green",color:"#5bd982",code:"C4"},
+{id:"yellow",name:"Yellow",color:"#e4c34f",code:"D2"},
+{id:"purple",name:"Purple",color:"#ad77e8",code:"E8"},
+{id:"orange",name:"Orange",color:"#e98b47",code:"F3"}
 ];
-
-const SETTINGS = {
-
-easy:{
-  count:3,
-  time:30,
-  mistakes:99,
-  short:800
-},
-
-normal:{
-  count:4,
-  time:24,
-  mistakes:3,
-  short:1000
-},
-
-hard:{
-  count:6,
-  time:18,
-  mistakes:2,
-  short:1250
-}
-
+const SETTINGS={
+easy:{count:3,time:30,mistakes:99,short:800},
+normal:{count:4,time:24,mistakes:3,short:1000},
+hard:{count:6,time:18,mistakes:2,short:1250}
 };
 
-let wires = [];
-
-let rightOrder = [];
-
-let selected = null;
-
-let connected =
-  new Set();
-
-let mistakeCount = 0;
-
-let locked = false;
-
-let shorted = false;
-
-let timerHandle = null;
-
-let deadline = 0;
-
-function shuffle(arr){
-
-  const out =
-    [...arr];
-
-  for(
-    let i =
-      out.length - 1;
-    i > 0;
-    i--
-  ){
-
-    const j =
-      Math.floor(
-        Math.random() *
-        (i + 1)
-      );
-
-    [
-      out[i],
-      out[j]
-    ] = [
-      out[j],
-      out[i]
-    ];
-
-  }
-
-  return out;
-
-}
-
-function settings(){
-
-  return SETTINGS[
-    $("difficulty").value
-  ];
-
-}
+let wires=[],rightOrder=[],selected=null,connected=new Set(),mistakeCount=0,locked=false,shorted=false,timerHandle=null,deadline=0;
+const shuffle=a=>{const o=[...a];for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}return o};
+const cfg=()=>SETTINGS[$("difficulty").value];
 
 function start(){
-
-  clearInterval(
-    timerHandle
-  );
-
-  selected = null;
-
-  connected =
-    new Set();
-
-  mistakeCount = 0;
-
-  locked = false;
-
-  shorted = false;
-
-  $("shortOverlay")
-    .classList
-    .remove("show");
-
-  $("unlock")
-    .classList
-    .remove("show");
-
-  $("safe")
-    .classList
-    .remove(
-      "shorting",
-      "hard"
-    );
-
-  const cfg =
-    settings();
-
-  if(
-    $("difficulty").value ===
-    "hard"
-  ){
-
-    $("safe")
-      .classList
-      .add("hard");
-
-  }
-
-  wires =
-    WIRES.slice(
-      0,
-      cfg.count
-    );
-
-  rightOrder =
-    shuffle(
-      wires
-    );
-
-  renderTerminals();
-
-  renderLEDs();
-
-  setMessage("");
-
-  deadline =
-    performance.now() +
-    cfg.time * 1000;
-
-  timerHandle =
-    setInterval(
-      updateTimer,
-      50
-    );
-
-  updateTimer();
-
-  updateUI();
-
-  requestAnimationFrame(
-    drawWires
-  );
-
+ clearInterval(timerHandle);selected=null;connected=new Set();mistakeCount=0;locked=false;shorted=false;
+ $("shortOverlay").classList.remove("show");$("unlock").classList.remove("show");$("safe").classList.remove("shorting","hard");
+ if($("difficulty").value==="hard")$("safe").classList.add("hard");
+ wires=WIRES.slice(0,cfg().count);rightOrder=shuffle(wires);renderTerminals();renderLEDs();setMessage("");
+ deadline=performance.now()+cfg().time*1000;timerHandle=setInterval(updateTimer,50);updateTimer();updateUI();requestAnimationFrame(drawWires);
 }
-
-function renderLEDs(){
-
-  $("leds")
-    .innerHTML =
-      wires
-        .map(
-          w =>
-            `<span
-              class="led"
-              data-led="${w.id}">
-            </span>`
-        )
-        .join("");
-
+function renderLEDs(){$("leds").innerHTML=wires.map(w=>`<span class="led" data-led="${w.id}"></span>`).join("")}
+function terminal(w,side){
+ const b=document.createElement("button");b.type="button";b.className="terminal";b.dataset.id=w.id;b.dataset.side=side;
+ b.innerHTML=`<span class="socket" style="background:${w.color};color:${w.color}"></span><span><div class="name">${w.name} ${side==="left"?"Wire":"Port"}</div><div class="code">${w.code}</div></span>`;
+ b.onclick=()=>side==="left"?chooseWire(w.id):choosePort(w.id,b);return b;
 }
-
-function buildTerminal(
-  wire,
-  side
-){
-
-  const btn =
-    document
-      .createElement(
-        "button"
-      );
-
-  btn.type =
-    "button";
-
-  btn.className =
-    "terminal";
-
-  btn.dataset.id =
-    wire.id;
-
-  btn.dataset.side =
-    side;
-
-  btn.innerHTML = `
-
-    <span
-      class="socket"
-      style="
-        background:
-        ${wire.color};
-        color:
-        ${wire.color};
-      ">
-    </span>
-
-    <span class="label">
-
-      <div class="name">
-        ${wire.name}
-        ${
-          side === "left"
-          ? "Wire"
-          : "Port"
-        }
-      </div>
-
-      <div class="code">
-        ${wire.code}
-      </div>
-
-    </span>
-
-  `;
-
-  btn.addEventListener(
-    "click",
-    () => {
-
-      if(side === "left"){
-
-        chooseWire(
-          wire.id
-        );
-
-      }else{
-
-        choosePort(
-          wire.id,
-          btn
-        );
-
-      }
-
-    }
-  );
-
-  return btn;
-
-}
-
 function renderTerminals(){
-
-  $("left").innerHTML = "";
-
-  $("right").innerHTML = "";
-
-  wires.forEach(
-    wire =>
-      $("left")
-        .appendChild(
-          buildTerminal(
-            wire,
-            "left"
-          )
-        )
-  );
-
-  rightOrder.forEach(
-    wire =>
-      $("right")
-        .appendChild(
-          buildTerminal(
-            wire,
-            "right"
-          )
-        )
-  );
-
+ $("left").innerHTML="";$("right").innerHTML="";
+ wires.forEach(w=>$("left").appendChild(terminal(w,"left")));rightOrder.forEach(w=>$("right").appendChild(terminal(w,"right")));
 }
-
-function chooseWire(id){
-
-  if(
-    locked ||
-    shorted ||
-    connected.has(id)
-  ){
-    return;
-  }
-
-  selected = id;
-
-  updateUI();
-
+function chooseWire(id){if(locked||shorted||connected.has(id))return;selected=id;updateUI()}
+function choosePort(id,el){
+ if(locked||shorted||!selected||connected.has(id))return;
+ if(selected===id){
+  const n=selected;connected.add(n);selected=null;document.querySelector(`[data-led="${n}"]`)?.classList.add("on");updateUI();
+  requestAnimationFrame(()=>drawWires(n));setMessage("Circuit connected.",true);
+  if(connected.size===wires.length)complete();return;
+ }
+ mistakeCount++;selected=null;updateUI();spark(el);shortCircuit();
+ if(mistakeCount>=cfg().mistakes&&cfg().mistakes<50){locked=true;setTimeout(()=>fail("ALARM TRIGGERED"),cfg().short)}
 }
-
-function choosePort(
-  id,
-  element
-){
-
-  if(
-    locked ||
-    shorted ||
-    !selected ||
-    connected.has(id)
-  ){
-    return;
-  }
-
-  if(
-    selected === id
-  ){
-
-    const newlyConnected =
-      selected;
-
-    connected.add(
-      newlyConnected
-    );
-
-    selected = null;
-
-    activateLED(
-      newlyConnected
-    );
-
-    updateUI();
-
-    requestAnimationFrame(
-      () =>
-        drawWires(
-          newlyConnected
-        )
-    );
-
-    setMessage(
-      "Circuit connected.",
-      true
-    );
-
-    if(
-      connected.size ===
-      wires.length
-    ){
-
-      complete();
-
-    }
-
-    return;
-  }
-
-  wrongConnection(
-    element
-  );
-
-}
-
-function wrongConnection(
-  element
-){
-
-  mistakeCount++;
-
-  selected = null;
-
-  updateUI();
-
-  spark(
-    element
-  );
-
-  shortCircuit();
-
-  if(
-    mistakeCount >=
-    settings().mistakes
-  ){
-
-    if(
-      settings().mistakes < 50
-    ){
-
-      locked = true;
-
-      setTimeout(
-        () =>
-          fail(
-            "ALARM TRIGGERED"
-          ),
-        settings().short
-      );
-
-    }
-
-  }
-
-}
-
 function shortCircuit(){
-
-  shorted = true;
-
-  $("safe")
-    .classList
-    .remove(
-      "shorting"
-    );
-
-  void $("safe")
-    .offsetWidth;
-
-  $("safe")
-    .classList
-    .add(
-      "shorting"
-    );
-
-  $("shortOverlay")
-    .classList
-    .add(
-      "show"
-    );
-
-  setMessage(
-    "Circuit short — controls locked.",
-    false
-  );
-
-  updateUI();
-
-  setTimeout(
-    () => {
-
-      $("shortOverlay")
-        .classList
-        .remove(
-          "show"
-        );
-
-      $("safe")
-        .classList
-        .remove(
-          "shorting"
-        );
-
-      if(!locked){
-
-        shorted = false;
-
-        setMessage(
-          "System recovered.",
-          true
-        );
-
-        updateUI();
-
-      }
-
-    },
-    settings().short
-  );
-
+ shorted=true;$("safe").classList.remove("shorting");void $("safe").offsetWidth;$("safe").classList.add("shorting");$("shortOverlay").classList.add("show");
+ setMessage("Circuit short — controls locked.",false);updateUI();
+ setTimeout(()=>{$("shortOverlay").classList.remove("show");$("safe").classList.remove("shorting");if(!locked){shorted=false;setMessage("System recovered.",true);updateUI()}},cfg().short);
 }
-
-function spark(
-  terminal
-){
-
-  const board =
-    $("board");
-
-  const br =
-    board
-      .getBoundingClientRect();
-
-  const tr =
-    terminal
-      .getBoundingClientRect();
-
-  const x =
-    tr.left +
-    tr.width / 2 -
-    br.left;
-
-  const y =
-    tr.top +
-    tr.height / 2 -
-    br.top;
-
-  for(
-    let i = 0;
-    i < 10;
-    i++
-  ){
-
-    const s =
-      document
-        .createElement(
-          "span"
-        );
-
-    s.className =
-      "spark";
-
-    s.style.left =
-      x + "px";
-
-    s.style.top =
-      y + "px";
-
-    const angle =
-      Math.random() *
-      Math.PI *
-      2;
-
-    const distance =
-      20 +
-      Math.random() *
-      32;
-
-    s.style
-      .setProperty(
-        "--x",
-        Math.cos(angle) *
-        distance +
-        "px"
-      );
-
-    s.style
-      .setProperty(
-        "--y",
-        Math.sin(angle) *
-        distance +
-        "px"
-      );
-
-    board.appendChild(
-      s
-    );
-
-    setTimeout(
-      () =>
-        s.remove(),
-      500
-    );
-
-  }
-
+function spark(el){
+ const b=$("board"),br=b.getBoundingClientRect(),r=el.getBoundingClientRect(),x=r.left+r.width/2-br.left,y=r.top+r.height/2-br.top;
+ for(let i=0;i<10;i++){const s=document.createElement("span");s.className="spark";s.style.left=x+"px";s.style.top=y+"px";const a=Math.random()*Math.PI*2,d=20+Math.random()*32;s.style.setProperty("--x",Math.cos(a)*d+"px");s.style.setProperty("--y",Math.sin(a)*d+"px");b.appendChild(s);setTimeout(()=>s.remove(),500)}
 }
-
-function activateLED(id){
-
-  const el =
-    document.querySelector(
-      `[data-led="${id}"]`
-    );
-
-  if(el){
-
-    el.classList
-      .add("on");
-
-  }
-
-}
-
 function updateTimer(){
-
-  if(locked){
-    return;
-  }
-
-  const remaining =
-    Math.max(
-      0,
-      deadline -
-      performance.now()
-    );
-
-  const seconds =
-    remaining / 1000;
-
-  $("timer")
-    .textContent =
-      seconds
-        .toFixed(1)
-        .padStart(
-          4,
-          "0"
-        ) + "s";
-
-  $("timer")
-    .classList
-    .toggle(
-      "warning",
-      seconds <= 8 &&
-      seconds > 4
-    );
-
-  $("timer")
-    .classList
-    .toggle(
-      "danger",
-      seconds <= 4
-    );
-
-  if(
-    remaining <= 0
-  ){
-
-    fail(
-      "BYPASS WINDOW EXPIRED"
-    );
-
-  }
-
+ if(locked)return;const rem=Math.max(0,deadline-performance.now()),sec=rem/1000;
+ $("timer").textContent=sec.toFixed(1)+"s";$("timer").classList.toggle("warning",sec<=8&&sec>4);$("timer").classList.toggle("danger",sec<=4);
+ if(rem<=0)fail("BYPASS WINDOW EXPIRED");
 }
-
-function complete(){
-
-  locked = true;
-
-  clearInterval(
-    timerHandle
-  );
-
-  updateUI();
-
-  setMessage(
-    "All circuits online...",
-    true
-  );
-
-  setTimeout(
-    () => {
-
-      $("unlock")
-        .classList
-        .add(
-          "show"
-        );
-
-    },
-    500
-  );
-
-}
-
-function fail(message){
-
-  if(
-    $("unlock")
-      .classList
-      .contains("show")
-  ){
-    return;
-  }
-
-  locked = true;
-
-  shorted = false;
-
-  clearInterval(
-    timerHandle
-  );
-
-  $("shortOverlay")
-    .classList
-    .remove("show");
-
-  setMessage(
-    message +
-    " — SAFE LOCKED",
-    false
-  );
-
-  updateUI();
-
-}
-
+function complete(){locked=true;clearInterval(timerHandle);updateUI();setMessage("All circuits online...",true);setTimeout(()=>$("unlock").classList.add("show"),500)}
+function fail(m){if($("unlock").classList.contains("show"))return;locked=true;shorted=false;clearInterval(timerHandle);$("shortOverlay").classList.remove("show");setMessage(m+" — SAFE LOCKED",false);updateUI()}
 function updateUI(){
-
-  document
-    .querySelectorAll(
-      ".terminal"
-    )
-    .forEach(
-      btn => {
-
-        const id =
-          btn.dataset.id;
-
-        const side =
-          btn.dataset.side;
-
-        btn.classList
-          .toggle(
-            "complete",
-            connected.has(id)
-          );
-
-        btn.classList
-          .toggle(
-            "selected",
-            side === "left" &&
-            selected === id
-          );
-
-        btn.disabled =
-          locked ||
-          shorted ||
-          connected.has(id);
-
-      }
-    );
-
-  $("matched")
-    .textContent =
-      `${connected.size} / ${wires.length}`;
-
-  const max =
-    settings().mistakes;
-
-  $("mistakes")
-    .textContent =
-      max > 50
-      ? `${mistakeCount} mistakes`
-      : `${mistakeCount} / ${max}`;
-
-  $("clear").disabled =
-    locked ||
-    shorted ||
-    !selected;
-
+ document.querySelectorAll(".terminal").forEach(b=>{const id=b.dataset.id,side=b.dataset.side;b.classList.toggle("complete",connected.has(id));b.classList.toggle("selected",side==="left"&&selected===id);b.disabled=locked||shorted||connected.has(id)});
+ $("matched").textContent=`${connected.size} / ${wires.length}`;$("mistakes").textContent=cfg().mistakes>50?`${mistakeCount} mistakes`:`${mistakeCount} / ${cfg().mistakes}`;$("clear").disabled=locked||shorted||!selected;
 }
-
-function drawWires(
-  newest = null
-){
-
-  const svg =
-    $("svg");
-
-  const board =
-    $("board");
-
-  const br =
-    board
-      .getBoundingClientRect();
-
-  svg.innerHTML = "";
-
-  connected.forEach(
-    id => {
-
-      const left =
-        document.querySelector(
-          `[data-side="left"][data-id="${id}"]`
-        );
-
-      const right =
-        document.querySelector(
-          `[data-side="right"][data-id="${id}"]`
-        );
-
-      if(
-        !left ||
-        !right
-      ){
-        return;
-      }
-
-      const lr =
-        left
-          .getBoundingClientRect();
-
-      const rr =
-        right
-          .getBoundingClientRect();
-
-      const x1 =
-        lr.right -
-        br.left;
-
-      const y1 =
-        lr.top +
-        lr.height / 2 -
-        br.top;
-
-      const x2 =
-        rr.left -
-        br.left;
-
-      const y2 =
-        rr.top +
-        rr.height / 2 -
-        br.top;
-
-      const mid =
-        (x1 + x2) /
-        2;
-
-      const d =
-        `M ${x1} ${y1}
-         C ${mid} ${y1},
-           ${mid} ${y2},
-           ${x2} ${y2}`;
-
-      const wire =
-        wires.find(
-          w =>
-            w.id === id
-        );
-
-      const path =
-        document
-          .createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path"
-          );
-
-      path.setAttribute(
-        "d",
-        d
-      );
-
-      path.setAttribute(
-        "stroke",
-        wire.color
-      );
-
-      path.classList
-        .add("wire");
-
-      path.style.filter =
-        `drop-shadow(
-          0 0 4px
-          ${wire.color}
-        )`;
-
-      svg.appendChild(
-        path
-      );
-
-      if(
-        id === newest
-      ){
-
-        const pulse =
-          document
-            .createElementNS(
-              "http://www.w3.org/2000/svg",
-              "path"
-            );
-
-        pulse.setAttribute(
-          "d",
-          d
-        );
-
-        pulse.classList
-          .add(
-            "power"
-          );
-
-        svg.appendChild(
-          pulse
-        );
-
-      }
-
-    }
-  );
-
+function drawWires(newest=null){
+ const svg=$("svg"),board=$("board"),br=board.getBoundingClientRect();svg.innerHTML="";
+ connected.forEach(id=>{
+  const l=document.querySelector(`[data-side="left"][data-id="${id}"]`),r=document.querySelector(`[data-side="right"][data-id="${id}"]`);if(!l||!r)return;
+  const lr=l.getBoundingClientRect(),rr=r.getBoundingClientRect(),x1=lr.right-br.left,y1=lr.top+lr.height/2-br.top,x2=rr.left-br.left,y2=rr.top+rr.height/2-br.top,mid=(x1+x2)/2;
+  const d=`M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`,w=wires.find(x=>x.id===id);
+  const p=document.createElementNS("http://www.w3.org/2000/svg","path");p.setAttribute("d",d);p.setAttribute("stroke",w.color);p.classList.add("wire");p.style.filter=`drop-shadow(0 0 4px ${w.color})`;svg.appendChild(p);
+  if(id===newest){const q=document.createElementNS("http://www.w3.org/2000/svg","path");q.setAttribute("d",d);q.classList.add("power");svg.appendChild(q)}
+ });
 }
-
-function setMessage(
-  text,
-  good = null
-){
-
-  $("result")
-    .textContent =
-      text;
-
-  $("result")
-    .className =
-      "result";
-
-  if(good === true){
-
-    $("result")
-      .classList
-      .add("good");
-
-  }
-
-  if(good === false){
-
-    $("result")
-      .classList
-      .add("bad");
-
-  }
-
-}
-
-$("difficulty")
-  .addEventListener(
-    "change",
-    start
-  );
-
-$("newSafe")
-  .addEventListener(
-    "click",
-    start
-  );
-
-$("clear")
-  .addEventListener(
-    "click",
-    () => {
-
-      if(
-        locked ||
-        shorted
-      ){
-        return;
-      }
-
-      selected = null;
-
-      updateUI();
-
-    }
-  );
-
-window
-  .addEventListener(
-    "resize",
-    () =>
-      requestAnimationFrame(
-        () =>
-          drawWires()
-      )
-  );
-
+function setMessage(t,g=null){$("result").textContent=t;$("result").className="result";if(g===true)$("result").classList.add("good");if(g===false)$("result").classList.add("bad")}
+$("difficulty").onchange=start;$("newSafe").onclick=start;$("clear").onclick=()=>{if(!locked&&!shorted){selected=null;updateUI()}};window.onresize=()=>requestAnimationFrame(()=>drawWires());
 start();
-
 })();
 </script>
-
 </body>
 </html>

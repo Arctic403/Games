@@ -1,3 +1,9 @@
-RiftCity Safe Minigame Lab — Overhaul Build 3
+# RiftCity Circuit Safe Prototype
 
-Upload index.html to the root of a GitHub Pages repo. All 7 minigames are embedded in that one file.
+GitHub Pages-ready standalone build.
+
+Files:
+- index.html
+- circuit-board.png
+
+Upload both files to the root of your GitHub Pages repository.
