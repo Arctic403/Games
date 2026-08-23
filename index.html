@@ -1,44 +1,939 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RiftCity Safe Lab</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RiftCity Wire Bypass Prototype</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#07090d;color:#f5f7fa;font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:10px}button,select,input{font:inherit}button,select{min-height:44px;border:1px solid #34404c;background:#151b23;color:#fff;border-radius:10px;padding:8px 11px}button{font-weight:800}.primary{background:#eef1f4;color:#090c10}.shell{max-width:1080px;margin:auto;background:#0e131a;border:1px solid #27313c;border-radius:18px;overflow:hidden;box-shadow:0 22px 60px #0008}.head{padding:16px;border-bottom:1px solid #27313c;display:flex;justify-content:space-between;gap:12px}.head h1{margin:3px 0 5px;font-size:22px}.head p{margin:0;color:#9da8b5;font-size:13px}.k{font-size:10px;letter-spacing:.15em;color:#8d98a6;font-weight:900}.build{font-size:11px;border:1px solid #34404c;border-radius:999px;padding:7px 9px;height:max-content;color:#b7c0ca}.tools{display:grid;grid-template-columns:1fr 140px auto auto;gap:8px;padding:10px;border-bottom:1px solid #27313c;background:#090d12}.stage{margin:10px;border:1px solid #26303b;border-radius:14px;background:linear-gradient(#0d1218,#090d12);min-height:570px;overflow:hidden}.stageHead{padding:13px 14px;border-bottom:1px solid #222b35;display:flex;justify-content:space-between;gap:10px}.stageHead h2{margin:0 0 4px;font-size:18px}.desc,.muted{color:#96a1ae;font-size:12px}.badges{display:flex;gap:6px;flex-wrap:wrap}.badge{border:1px solid #33404c;background:#111821;border-radius:999px;padding:6px 8px;font-size:10px}.play{min-height:500px;padding:14px;display:flex;align-items:center;justify-content:center}.game{width:min(100%,720px)}.row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}.hud{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}.chip{font-size:11px;border:1px solid #303a46;border-radius:999px;padding:7px 9px;background:#0d131a}.meter{height:10px;background:#070a0e;border:1px solid #29333e;border-radius:999px;overflow:hidden}.meter>div{height:100%;background:linear-gradient(90deg,#66717e,#eef2f5);transition:width .08s linear}.status{min-height:34px;text-align:center;font-weight:800;font-size:13px;margin-top:10px}.good{color:#adf0c0}.bad{color:#ffaaaa}.debug{font:11px ui-monospace,monospace;color:#808b98;text-align:center;margin-top:8px}
+*{
+  box-sizing:border-box;
+}
 
-/*dial*/.dialWrap{position:relative;width:min(80vw,350px);aspect-ratio:1;margin:auto}.dial{position:absolute;inset:8%;border-radius:50%;border:14px solid #303b47;background:radial-gradient(circle at 38% 32%,#36414d,#131922 66%,#090d12);touch-action:none}.core{position:absolute;inset:29%;border-radius:50%;background:#080c11;border:2px solid #3a4653;display:flex;flex-direction:column;align-items:center;justify-content:center}.num{font-size:58px;font-weight:950}.dir{font-size:10px;letter-spacing:.13em;color:#9ca7b4;font-weight:900}.ptr{position:absolute;top:-18px;left:50%;transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:22px solid #f2f4f6}.feel{width:min(100%,560px);margin:12px auto}.dots{display:flex;justify-content:center;gap:6px;margin:7px}.dots i{width:7px;height:7px;border-radius:50%;background:#26303b}.dots i.on{background:#eef2f5;box-shadow:0 0 10px #fff8}
+:root{
+  color-scheme:dark;
+  --bg:#07090d;
+  --panel:#0f141b;
+  --panel2:#151c25;
+  --border:#29333f;
+  --text:#f4f6f8;
+  --muted:#919ca9;
+  --good:#9ff0b6;
+  --bad:#ff9f9f;
+}
 
-/*tumblers*/.pins{display:flex;gap:10px;justify-content:center;align-items:flex-end;overflow-x:auto;padding:12px;background:#080c11;border:1px solid #27313d;border-radius:12px}.pin{min-width:65px;text-align:center}.tube{height:240px;position:relative;border:1px solid #34404c;background:#101720;border-radius:10px;overflow:hidden}.shear{position:absolute;left:0;right:0;top:43%;height:3px;background:#f0f3f5}.metal{position:absolute;bottom:0;left:18px;width:28px;background:linear-gradient(90deg,#66717e,#d6dbe0,#77828e);border-radius:6px 6px 2px 2px;transition:height .12s}.pinBtns{display:flex;gap:4px;margin-top:6px}.pinBtns button{min-height:34px;flex:1;padding:4px}
+html,body{
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at top,#151c27 0%,#090c11 38%,#05070a 100%);
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
 
-/*wave*/.scope{height:220px;display:flex;align-items:center;gap:3px;padding:10px;border:1px solid #2c3641;border-radius:12px;background:#070b10}.scope i{display:block;flex:1;min-width:2px;background:#abb4bf;border-radius:999px;transition:height .1s}
+body{
+  padding:12px;
+}
 
-/*rings*/.rings{position:relative;width:min(80vw,350px);aspect-ratio:1;margin:auto}.ring{position:absolute;border-radius:50%;border:18px solid #53606e;transition:transform .15s}.r1{inset:0}.r2{inset:17%;border-color:#737f8e}.r3{inset:34%;border-color:#9ca5b0}.slot{position:absolute;top:-21px;left:50%;transform:translateX(-50%);width:18px;height:31px;background:#090d12}.ringBtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+button,select{
+  font:inherit;
+}
 
-/*route*/.nodes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:12px;border:1px solid #2b3540;background:#080c11;border-radius:12px}.node{aspect-ratio:1;min-height:55px}.node.on{background:#e3e7eb;color:#090c10}.node.alarm{border-color:#74474e;box-shadow:inset 0 0 0 2px #5b333988}
+button{
+  cursor:pointer;
+}
 
-/*listen*/.audio{padding:20px;border:1px solid #2c3641;background:#080c11;border-radius:12px;text-align:center}.word{font-size:46px;font-weight:950;min-height:62px}.track{height:28px;position:relative;background:#05080c;border:1px solid #2d3742;border-radius:999px;overflow:hidden}.needle{position:absolute;top:-4px;bottom:-4px;width:4px;background:#f5f6f7}.zone{position:absolute;top:0;bottom:0;background:#ffffff10}.bars{height:52px;display:flex;gap:5px;justify-content:center;align-items:flex-end;margin:10px}.bars i{width:6px;background:#8994a1;border-radius:999px}
+.app{
+  max-width:900px;
+  margin:0 auto;
+}
 
-/*deduce*/.digits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:340px;margin:auto}.digits input{height:62px;border:1px solid #394552;background:#080c11;color:#fff;border-radius:11px;text-align:center;font-size:28px;font-weight:900}.history{display:grid;gap:6px;margin-top:12px}.hrow{display:grid;grid-template-columns:72px 1fr;gap:10px;padding:8px;border:1px solid #29333e;background:#0c1117;border-radius:9px}.code{font-weight:900;letter-spacing:.08em}
-@media(max-width:720px){.head,.stageHead{flex-direction:column}.tools{grid-template-columns:1fr 1fr}.tools select:first-child{grid-column:1/-1}.play{padding:10px 7px}.stage{min-height:auto}.ringBtns{grid-template-columns:1fr}.pins{justify-content:flex-start}}
-</style></head><body>
-<div class="shell">
-<header class="head"><div><div class="k">RIFTCITY CRIME PROTOTYPE</div><h1>Safe Minigame Lab — Quality Overhaul</h1><p>Seven redesigned prototypes with cleaner feedback, better mobile play, and less placeholder UI.</p></div><div class="build">OVERHAUL BUILD 3</div></header>
-<div class="tools"><select id="mode"><option value="dial">1. Mechanical Dial</option><option value="pins">2. Precision Tumblers</option><option value="wave">3. Acoustic Scanner</option><option value="rings">4. Vault Ring Lock</option><option value="route">5. Electronic Bypass</option><option value="listen">6. Audio Click Timing</option><option value="code">7. Code Deduction</option></select><select id="difficulty"><option>Easy</option><option selected>Normal</option><option>Hard</option></select><button id="reset">Reset</button><button id="debugBtn">Debug</button></div>
-<section id="stage" class="stage"></section>
-</div>
+.panel{
+  background:rgba(15,20,27,.97);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.45);
+}
+
+.header{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  align-items:flex-start;
+}
+
+.kicker{
+  font-size:10px;
+  letter-spacing:.16em;
+  font-weight:900;
+  color:var(--muted);
+}
+
+h1{
+  margin:4px 0 6px;
+  font-size:22px;
+}
+
+.header p{
+  margin:0;
+  color:#a6b0bd;
+  font-size:13px;
+}
+
+.build{
+  font-size:10px;
+  border:1px solid #35404c;
+  border-radius:999px;
+  padding:7px 9px;
+  white-space:nowrap;
+  color:#c2cad3;
+}
+
+.toolbar{
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  background:#0a0e13;
+}
+
+select,
+.toolbar button{
+  min-height:42px;
+  border-radius:10px;
+  border:1px solid #34404d;
+  background:#151c25;
+  color:white;
+  padding:8px 11px;
+}
+
+.toolbar button{
+  font-weight:800;
+}
+
+.game{
+  padding:14px;
+}
+
+.safe{
+  border:1px solid #2a3440;
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,#171e27,#0a0e13);
+  padding:16px;
+}
+
+.safe-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.safe-top h2{
+  margin:0 0 4px;
+  font-size:18px;
+}
+
+.sub{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stats{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.chip{
+  background:#0b0f14;
+  border:1px solid #303b47;
+  border-radius:999px;
+  padding:7px 9px;
+  font-size:11px;
+}
+
+.wire-board{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:90px;
+  min-height:430px;
+  background:#080c11;
+  border:1px solid #28323d;
+  border-radius:14px;
+  padding:18px;
+  overflow:hidden;
+}
+
+.column{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-around;
+  gap:10px;
+  z-index:2;
+}
+
+.column.right{
+  align-items:flex-end;
+}
+
+.terminal{
+  width:100%;
+  max-width:245px;
+  min-height:58px;
+  border:1px solid #36414e;
+  background:#121922;
+  border-radius:12px;
+  padding:8px 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  transition:
+    transform .12s ease,
+    border-color .12s ease,
+    background .12s ease;
+  color:white;
+}
+
+.right .terminal{
+  flex-direction:row-reverse;
+}
+
+.terminal:hover{
+  background:#18212c;
+}
+
+.terminal.selected{
+  border-color:white;
+  transform:scale(1.025);
+  background:#1c2632;
+}
+
+.terminal.complete{
+  opacity:.5;
+}
+
+.socket{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.65);
+  flex:0 0 auto;
+  box-shadow:
+    inset 0 0 0 3px rgba(0,0,0,.45),
+    0 0 12px rgba(255,255,255,.08);
+}
+
+.wire-label{
+  font-weight:850;
+  font-size:13px;
+}
+
+.wire-code{
+  font-size:10px;
+  color:#8995a3;
+  margin-top:2px;
+}
+
+.svg-layer{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  margin-top:14px;
+}
+
+.reset-btn{
+  border:1px solid #36414d;
+  background:#161e27;
+  color:white;
+  min-height:44px;
+  border-radius:11px;
+  padding:9px 14px;
+  font-weight:850;
+}
+
+.result{
+  min-height:36px;
+  text-align:center;
+  margin-top:10px;
+  font-weight:850;
+  font-size:13px;
+}
+
+.result.good{
+  color:var(--good);
+}
+
+.result.bad{
+  color:var(--bad);
+}
+
+.flash{
+  animation:flash .25s ease;
+}
+
+@keyframes flash{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-5px)}
+  50%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  100%{transform:translateX(0)}
+}
+
+@media(max-width:680px){
+  body{
+    padding:7px;
+  }
+
+  .header,
+  .safe-top{
+    flex-direction:column;
+  }
+
+  .stats{
+    justify-content:flex-start;
+  }
+
+  .wire-board{
+    gap:28px;
+    min-height:400px;
+    padding:10px;
+  }
+
+  .terminal{
+    padding:7px;
+    min-height:54px;
+  }
+
+  .wire-label{
+    font-size:11px;
+  }
+
+  .wire-code{
+    font-size:9px;
+  }
+
+  .socket{
+    width:18px;
+    height:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+  <section class="panel">
+
+    <header class="header">
+      <div>
+        <div class="kicker">RIFTCITY CRIME PROTOTYPE</div>
+        <h1>Electronic Safe Bypass</h1>
+        <p>Match each circuit wire to its correct terminal.</p>
+      </div>
+
+      <div class="build">WIRE TEST BUILD</div>
+    </header>
+
+    <div class="toolbar">
+
+      <select id="difficulty">
+        <option value="easy">Easy — 3 wires</option>
+        <option value="normal" selected>Normal — 4 wires</option>
+        <option value="hard">Hard — 6 wires</option>
+      </select>
+
+      <button id="newSafe" type="button">
+        New Safe
+      </button>
+
+    </div>
+
+    <div class="game">
+
+      <section id="safe" class="safe">
+
+        <div class="safe-top">
+
+          <div>
+            <h2>Access Panel</h2>
+            <div class="sub">
+              Select a wire on the left, then connect it to the matching terminal.
+            </div>
+          </div>
+
+          <div class="stats">
+            <div id="matchedChip" class="chip">
+              Matched 0 / 4
+            </div>
+
+            <div id="mistakeChip" class="chip">
+              Mistakes 0 / 3
+            </div>
+          </div>
+
+        </div>
+
+        <div id="board" class="wire-board">
+
+          <svg
+            id="svg"
+            class="svg-layer"
+            preserveAspectRatio="none">
+          </svg>
+
+          <div id="leftColumn" class="column"></div>
+
+          <div id="rightColumn" class="column right"></div>
+
+        </div>
+
+        <div class="actions">
+          <button
+            id="clearSelection"
+            class="reset-btn"
+            type="button">
+            Clear Selection
+          </button>
+        </div>
+
+        <div
+          id="result"
+          class="result"
+          aria-live="polite">
+        </div>
+
+      </section>
+
+    </div>
+
+  </section>
+</main>
+
 <script>
-(()=>{
-const $=id=>document.getElementById(id),rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),wrap=(v,m)=>((v%m)+m)%m;
-let debug=false,cleanup=()=>{};const diff=()=>$("#difficulty")?.value||$("difficulty").value;
-function base(title,desc,badges,body){try{cleanup()}catch{}cleanup=()=>{};$("stage").innerHTML=`<div class="stageHead"><div><h2>${title}</h2><div class="desc">${desc}</div></div><div class="badges">${badges.map(x=>`<span class="badge">${x}</span>`).join("")}</div></div><div class="play">${body}</div>`}
-function msg(t,g=true){const e=$("result");e.textContent=t;e.className="status "+(g?"good":"bad")}function dbg(t){const e=$("debug");if(e)e.textContent=debug?t:""}
-function renderDial(){base("Mechanical Dial","Find three hidden click points in Left → Right → Left order.",["Precision","3 stages","Touch"],`<div class="game"><div class="hud"><span id="st" class="chip"></span><span id="mi" class="chip"></span></div><div class="dialWrap"><button id="dial" class="dial"><div class="ptr"></div><div class="core"><div id="num" class="num">00</div><div id="dir" class="dir">TURN LEFT</div></div></button></div><div class="feel"><div class="meter"><div id="sig"></div></div><div id="dots" class="dots">${"<i></i>".repeat(5)}</div><div id="feel" class="muted" style="text-align:center"></div></div><div class="row"><button id="l">◀ Left</button><button id="set" class="primary">Set Number</button><button id="r">Right ▶</button></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);
-const w={Easy:8,Normal:5,Hard:3}[diff()],combo=[rand(0,99),rand(0,99),rand(0,99)],dirs=["left","right","left"];let s=0,m=0,c=rand(0,99),last=null,drag=false,la=0;const dist=(a,b)=>Math.min(Math.abs(a-b),100-Math.abs(a-b));
-function up(){const d=s>=3?0:dist(c,combo[s]),p=s>=3?100:clamp((1-d/20)*100,0,100);$("num").textContent=String(c).padStart(2,"0");$("dir").textContent=s>=3?"OPEN":"TURN "+dirs[s].toUpperCase();$("st").textContent=`Stage ${Math.min(s+1,3)} / 3`;$("mi").textContent=`Mistakes ${m} / 3`;$("sig").style.width=p+"%";[...$("dots").children].forEach((x,i)=>x.classList.toggle("on",i<Math.round(p/20)));$("feel").textContent=p>82?"Distinct click tension":p>55?"Strong resistance":p>30?"Faint vibration":"No feedback";dbg(`combo ${combo.join("/")}`)}
-function mv(d,a=1){if(s>=3||m>=3)return;last=d;c=wrap(c+(d==="right"?a:-a),100);up()}$("l").onclick=()=>mv("left");$("r").onclick=()=>mv("right");$("set").onclick=()=>{if(last!==dirs[s]){m++;msg("Wrong rotation direction.",false);return up()}if(dist(c,combo[s])<=w){s++;last=null;msg(s===3?"Safe opened — clean crack.":"Click locked. Reverse direction.",true)}else{m++;msg(m>=3?"Lock seized.":"No click.",false)}up()};
-const d=$("dial"),ang=e=>{const q=d.getBoundingClientRect();return Math.atan2(e.clientY-(q.top+q.height/2),e.clientX-(q.left+q.width/2))*180/Math.PI};d.onpointerdown=e=>{drag=true;la=ang(e);d.setPointerCapture(e.pointerId)};d.onpointermove=e=>{if(!drag)return;let a=ang(e),x=a-la;if(x>180)x-=360;if(x<-180)x+=360;if(Math.abs(x)>2.5){mv(x>0?"right":"left",Math.max(1,Math.round(Math.abs(x)/5)));la=a}};d.onpointerup=()=>drag=false;up()}
-function renderPins(){const n={Easy:4,Normal:5,Hard:6}[diff()],tol={Easy:8,Normal:5,Hard:3}[diff()],step={Easy:5,Normal:4,Hard:3}[diff()];base("Precision Tumblers","Set each pin close enough to the shear line to bind the cylinder.",["Puzzle",`${n} pins`,"No timer"],`<div class="game"><div id="pins" class="pins"></div><div class="row" style="margin-top:12px"><button id="test" class="primary">Test Cylinder</button></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);let v=Array.from({length:n},()=>rand(15,80)),t=Array.from({length:n},()=>rand(36,68));function draw(){$("pins").innerHTML=v.map((x,i)=>`<div class="pin"><div class="tube"><div class="shear"></div><div class="metal" style="height:${78+x*1.72}px;${Math.abs(x-t[i])<=tol?"box-shadow:0 0 18px #fff5":""}"></div></div><div class="pinBtns"><button data-i="${i}" data-d="-1">−</button><button data-i="${i}" data-d="1">+</button></div><div class="muted">Pin ${i+1}</div></div>`).join("");$("pins").querySelectorAll("button").forEach(b=>b.onclick=()=>{let i=+b.dataset.i;v[i]=clamp(v[i]+(+b.dataset.d)*step,0,100);draw()});dbg(`targets ${t.join(",")}`)}$("test").onclick=()=>{let ok=v.filter((x,i)=>Math.abs(x-t[i])<=tol).length;msg(ok===n?`Cylinder turned — ${n}/${n} aligned.`:`${ok}/${n} pins binding.`,ok===n)};draw()}
-function renderWave(){base("Acoustic Scanner","Sweep across the lock and capture three resonance peaks.",["Observation","3 signatures","Scanner"],`<div class="game"><div class="hud"><span id="found" class="chip"></span><span id="pos" class="chip"></span></div><div id="scope" class="scope"></div><div class="row" style="margin-top:12px"><button id="wl">◀ Scan</button><div style="flex:1;min-width:150px" class="meter"><div id="strength"></div></div><button id="wr">Scan ▶</button></div><div class="row" style="margin-top:10px"><button id="lock" class="primary">Lock Signature</button></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);let peaks=[rand(10,27),rand(39,61),rand(72,90)],found=[],p=0;const tol={Easy:5,Normal:3,Hard:2}[diff()];function draw(){let a=peaks.filter(x=>!found.includes(x)),d=a.length?Math.min(...a.map(x=>Math.abs(x-p))):0,s=a.length?clamp((1-d/17)*100,0,100):100;$("found").textContent=`${found.length}/3 signatures`;$("pos").textContent=`Position ${String(p).padStart(2,"0")}`;$("strength").style.width=s+"%";$("scope").innerHTML=Array.from({length:48},(_,i)=>`<i style="height:${12+Math.abs(Math.sin((i+p)/3.5))*30+(s/100)*(35+Math.abs(Math.sin((i+p)*.55))*92)}px"></i>`).join("");dbg(`peaks ${peaks.join(",")}`)}$("wl").onclick=()=>{p=clamp(p-1,0,99);draw()};$("wr").onclick=()=>{p=clamp(p+1,0,99);draw()};$("lock").onclick=()=>{let a=peaks.filter(x=>!found.includes(x));if(!a.length)return;let t=a.sort((x,y)=>Math.abs(x-p)-Math.abs(y-p))[0];if(Math.abs(t-p)<=tol){found.push(t);msg(found.length===3?"All signatures captured — open.":"Signature captured.",true)}else msg("False resonance.",false);draw()};draw()}
-function renderRings(){base("Vault Ring Lock","Rotate three concentric rings until every notch aligns at twelve o'clock.",["Logic","Mechanical","3 rings"],`<div class="game"><div class="rings"><div id="r1" class="ring r1"><div class="slot"></div></div><div id="r2" class="ring r2"><div class="slot"></div></div><div id="r3" class="ring r3"><div class="slot"></div></div></div><div class="ringBtns"><button data-r="0">Rotate Outer</button><button data-r="1">Rotate Middle</button><button data-r="2">Rotate Inner</button></div><div class="row" style="margin-top:10px"><button id="test" class="primary">Engage Lock</button></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);let a=[rand(0,11)*30,rand(0,11)*30,rand(0,11)*30],coupled=diff()==="Hard";function draw(){["r1","r2","r3"].forEach((id,i)=>$(id).style.transform=`rotate(${a[i]}deg)`);dbg(`angles ${a.join(",")}`)}document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{let i=+b.dataset.r;a[i]=(a[i]+30)%360;if(coupled&&i<2)a[i+1]=(a[i+1]+30)%360;draw()});$("test").onclick=()=>{let ok=a.every(x=>x===0);msg(ok?"Lock bars retracted — open.":"Rings still misaligned.",ok)};draw()}
-function renderRoute(){base("Electronic Bypass","Build the correct power path from START to LOCK without touching alarm nodes.",["Pathfinding","Electronic","Risk"],`<div class="game"><div id="nodes" class="nodes"></div><div class="row" style="margin-top:12px"><button id="test" class="primary">Run Bypass</button></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);const routes=[[0,1,6,7,12,13,18,19],[0,5,6,11,12,17,18,19],[0,1,2,7,12,17,18,19]],valid=routes[rand(0,2)],n=20,start=0,end=19,alarms=new Set(),count={Easy:2,Normal:4,Hard:6}[diff()];while(alarms.size<count){let x=rand(1,18);if(!valid.includes(x))alarms.add(x)}let sel=new Set([0,19]);function draw(){$("nodes").innerHTML=Array.from({length:n},(_,i)=>`<button class="node ${sel.has(i)?"on":""} ${alarms.has(i)?"alarm":""}" data-n="${i}" ${i===start||i===end?"disabled":""}>${i===0?"START":i===19?"LOCK":i+1}</button>`).join("");$("nodes").querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{let i=+b.dataset.n;sel.has(i)?sel.delete(i):sel.add(i);draw()});dbg(`route ${valid.join("→")} alarms ${[...alarms].join(",")}`)}$("test").onclick=()=>{let trip=[...sel].some(i=>alarms.has(i)),ok=valid.every(i=>sel.has(i));msg(!trip&&ok?"Bypass accepted — open.":trip?"Alarm circuit tripped.":"Power path incomplete.",!trip&&ok)};draw()}
-function renderListen(){base("Audio Click Timing","Read the changing click intensity and stop on the strongest double-click.",["Reaction","Audio-style","Timing"],`<div class="game"><div class="audio"><div id="word" class="word">...</div><div id="bars" class="bars"></div><div class="track"><div id="zone" class="zone"></div><div id="needle" class="needle"></div></div><button id="stop" class="primary" style="margin-top:15px">STOP ON CLICK</button></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);let x=0,d=1,raf,last=performance.now(),speed={Easy:24,Normal:34,Hard:44}[diff()],w={Easy:14,Normal:9,Hard:6}[diff()],t=rand(16,80);$("zone").style.left=t+"%";$("zone").style.width=w+"%";$("zone").style.opacity=debug?".25":".03";function f(now){let dt=Math.min(.05,(now-last)/1000);last=now;x+=d*speed*dt;if(x>=100){x=100;d=-1}else if(x<=0){x=0;d=1}$("needle").style.left=x+"%";let q=Math.abs(x-(t+w/2)),p=clamp(1-q/24,0,1);$("word").textContent=q<3.2?"CLICK-CLICK":q<10?"click...":"...";$("bars").innerHTML=Array.from({length:14},(_,i)=>`<i style="height:${8+Math.abs(Math.sin(i*.9+x*.08))*40*p}px;opacity:${.3+.7*p}"></i>`).join("");raf=requestAnimationFrame(f)}$("stop").onclick=()=>{let ok=x>=t&&x<=t+w;msg(ok?"Perfect double-click — open.":"Wrong click timing.",ok)};dbg(`target ${t}-${t+w}`);raf=requestAnimationFrame(f);cleanup=()=>cancelAnimationFrame(raf)}
-function renderCode(){base("Code Deduction","Crack a 3-digit keypad code using Exact and Near feedback.",["Logic","Limited tries","Keypad"],`<div class="game"><div class="hud"><span id="attempts" class="chip"></span></div><div class="digits"><input id="g1" inputmode="numeric" maxlength="1"><input id="g2" inputmode="numeric" maxlength="1"><input id="g3" inputmode="numeric" maxlength="1"></div><div class="row" style="margin-top:10px"><button id="submit" class="primary">Submit Code</button></div><div id="history" class="history"></div><div id="debug" class="debug"></div><div id="result" class="status"></div></div>`);let code=[rand(0,9),rand(0,9),rand(0,9)],tries=0,max={Easy:8,Normal:6,Hard:5}[diff()],done=false,ins=[$("g1"),$("g2"),$("g3")];ins.forEach((e,i)=>e.oninput=()=>{e.value=e.value.replace(/\D/g,"").slice(0,1);if(e.value&&i<2)ins[i+1].focus()});function score(v){let ex=0,nr=0,rc=[],rg=[];for(let i=0;i<3;i++)v[i]===code[i]?ex++:(rc.push(code[i]),rg.push(v[i]));for(const g of rg){let x=rc.indexOf(g);if(x>=0){nr++;rc.splice(x,1)}}return[ex,nr]}$("submit").onclick=()=>{if(done||tries>=max)return;if(ins.some(x=>x.value===""))return msg("Enter all three digits.",false);let v=ins.map(x=>+x.value),[e,n]=score(v);tries++;let r=document.createElement("div");r.className="hrow";r.innerHTML=`<div class="code">${v.join("")}</div><div>${e} Exact • ${n} Near</div>`;$("history").prepend(r);$("attempts").textContent=`Attempts ${tries}/${max}`;if(e===3){done=true;msg("Code accepted — open.",true)}else if(tries>=max)msg("Keypad locked out.",false);else msg("Feedback logged.",true);ins.forEach(x=>x.value="");ins[0].focus()};$("attempts").textContent=`Attempts 0/${max}`;dbg(`code ${code.join("")}`)}
-const renders={dial:renderDial,pins:renderPins,wave:renderWave,rings:renderRings,route:renderRoute,listen:renderListen,code:renderCode};function render(){renders[$("mode").value]()}$("mode").onchange=render;$("difficulty").onchange=render;$("reset").onclick=render;$("debugBtn").onclick=()=>{debug=!debug;render()};render();
+(() => {
+
+const $ = id => document.getElementById(id);
+
+const COLORS = [
+  {
+    id: "red",
+    name: "Red",
+    color: "#e55353",
+    code: "A1"
+  },
+  {
+    id: "blue",
+    name: "Blue",
+    color: "#4e8fe8",
+    code: "B7"
+  },
+  {
+    id: "green",
+    name: "Green",
+    color: "#55b978",
+    code: "C4"
+  },
+  {
+    id: "yellow",
+    name: "Yellow",
+    color: "#d9b94b",
+    code: "D2"
+  },
+  {
+    id: "purple",
+    name: "Purple",
+    color: "#a672df",
+    code: "E8"
+  },
+  {
+    id: "orange",
+    name: "Orange",
+    color: "#d98547",
+    code: "F3"
+  }
+];
+
+let wires = [];
+
+let selectedLeft = null;
+
+let matched = new Set();
+
+let mistakes = 0;
+
+let locked = false;
+
+function shuffle(array) {
+
+  const result = [...array];
+
+  for(let i = result.length - 1; i > 0; i--){
+
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [
+      result[i],
+      result[j]
+    ] = [
+      result[j],
+      result[i]
+    ];
+
+  }
+
+  return result;
+
+}
+
+function getWireCount(){
+
+  const difficulty = $("difficulty").value;
+
+  if(difficulty === "easy"){
+    return 3;
+  }
+
+  if(difficulty === "hard"){
+    return 6;
+  }
+
+  return 4;
+
+}
+
+function maxMistakes(){
+
+  const difficulty = $("difficulty").value;
+
+  if(difficulty === "easy"){
+    return 99;
+  }
+
+  if(difficulty === "hard"){
+    return 2;
+  }
+
+  return 3;
+
+}
+
+function startGame(){
+
+  locked = false;
+
+  selectedLeft = null;
+
+  matched.clear();
+
+  mistakes = 0;
+
+  const count = getWireCount();
+
+  wires = COLORS.slice(0,count);
+
+  render();
+
+  setMessage("");
+
+}
+
+function render(){
+
+  const left = $("leftColumn");
+
+  const right = $("rightColumn");
+
+  left.innerHTML = "";
+
+  right.innerHTML = "";
+
+  const shuffledRight = shuffle(wires);
+
+  wires.forEach(wire => {
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+
+    button.className = "terminal";
+
+    button.dataset.side = "left";
+
+    button.dataset.id = wire.id;
+
+    button.innerHTML = `
+      <span
+        class="socket"
+        style="background:${wire.color}">
+      </span>
+
+      <span>
+        <div class="wire-label">
+          ${wire.name} Wire
+        </div>
+
+        <div class="wire-code">
+          Circuit ${wire.code}
+        </div>
+      </span>
+    `;
+
+    button.addEventListener(
+      "click",
+      () => selectLeft(wire.id)
+    );
+
+    left.appendChild(button);
+
+  });
+
+  shuffledRight.forEach(wire => {
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+
+    button.className = "terminal";
+
+    button.dataset.side = "right";
+
+    button.dataset.id = wire.id;
+
+    button.innerHTML = `
+      <span
+        class="socket"
+        style="background:${wire.color}">
+      </span>
+
+      <span>
+        <div class="wire-label">
+          ${wire.name} Port
+        </div>
+
+        <div class="wire-code">
+          Terminal ${wire.code}
+        </div>
+      </span>
+    `;
+
+    button.addEventListener(
+      "click",
+      () => selectRight(wire.id)
+    );
+
+    right.appendChild(button);
+
+  });
+
+  updateUI();
+
+  requestAnimationFrame(drawConnections);
+
+}
+
+function selectLeft(id){
+
+  if(locked || matched.has(id)){
+    return;
+  }
+
+  selectedLeft = id;
+
+  updateUI();
+
+}
+
+function selectRight(id){
+
+  if(
+    locked ||
+    !selectedLeft ||
+    matched.has(id)
+  ){
+    return;
+  }
+
+  if(selectedLeft === id){
+
+    matched.add(id);
+
+    selectedLeft = null;
+
+    setMessage(
+      "Circuit connected.",
+      true
+    );
+
+    updateUI();
+
+    requestAnimationFrame(
+      drawConnections
+    );
+
+    if(matched.size === wires.length){
+
+      locked = true;
+
+      setTimeout(() => {
+
+        setMessage(
+          "BYPASS COMPLETE — SAFE UNLOCKED",
+          true
+        );
+
+      },150);
+
+    }
+
+    return;
+  }
+
+  mistakes++;
+
+  selectedLeft = null;
+
+  setMessage(
+    "Wrong terminal.",
+    false
+  );
+
+  $("safe").classList.remove("flash");
+
+  void $("safe").offsetWidth;
+
+  $("safe").classList.add("flash");
+
+  const max = maxMistakes();
+
+  if(mistakes >= max){
+
+    locked = true;
+
+    setMessage(
+      "ALARM TRIGGERED — BYPASS FAILED",
+      false
+    );
+
+  }
+
+  updateUI();
+
+}
+
+function updateUI(){
+
+  document
+    .querySelectorAll(".terminal")
+    .forEach(button => {
+
+      const id = button.dataset.id;
+
+      const side = button.dataset.side;
+
+      button.classList.toggle(
+        "complete",
+        matched.has(id)
+      );
+
+      button.classList.toggle(
+        "selected",
+        side === "left" &&
+        selectedLeft === id
+      );
+
+      button.disabled =
+        locked ||
+        matched.has(id);
+
+    });
+
+  $("matchedChip").textContent =
+    `Matched ${matched.size} / ${wires.length}`;
+
+  const max = maxMistakes();
+
+  $("mistakeChip").textContent =
+    max > 50
+      ? `Mistakes ${mistakes}`
+      : `Mistakes ${mistakes} / ${max}`;
+
+}
+
+function setMessage(
+  message,
+  good = null
+){
+
+  const element = $("result");
+
+  element.textContent = message;
+
+  element.className = "result";
+
+  if(good === true){
+    element.classList.add("good");
+  }
+
+  if(good === false){
+    element.classList.add("bad");
+  }
+
+}
+
+function drawConnections(){
+
+  const svg = $("svg");
+
+  const board = $("board");
+
+  const boardRect =
+    board.getBoundingClientRect();
+
+  svg.innerHTML = "";
+
+  matched.forEach(id => {
+
+    const left =
+      document.querySelector(
+        `[data-side="left"][data-id="${id}"]`
+      );
+
+    const right =
+      document.querySelector(
+        `[data-side="right"][data-id="${id}"]`
+      );
+
+    if(!left || !right){
+      return;
+    }
+
+    const leftRect =
+      left.getBoundingClientRect();
+
+    const rightRect =
+      right.getBoundingClientRect();
+
+    const wire =
+      wires.find(
+        wire => wire.id === id
+      );
+
+    const x1 =
+      leftRect.right -
+      boardRect.left;
+
+    const y1 =
+      leftRect.top +
+      leftRect.height / 2 -
+      boardRect.top;
+
+    const x2 =
+      rightRect.left -
+      boardRect.left;
+
+    const y2 =
+      rightRect.top +
+      rightRect.height / 2 -
+      boardRect.top;
+
+    const mid =
+      (x1 + x2) / 2;
+
+    const path =
+      document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+
+    path.setAttribute(
+      "d",
+      `M ${x1} ${y1}
+       C ${mid} ${y1},
+         ${mid} ${y2},
+         ${x2} ${y2}`
+    );
+
+    path.setAttribute(
+      "fill",
+      "none"
+    );
+
+    path.setAttribute(
+      "stroke",
+      wire.color
+    );
+
+    path.setAttribute(
+      "stroke-width",
+      "5"
+    );
+
+    path.setAttribute(
+      "stroke-linecap",
+      "round"
+    );
+
+    path.style.filter =
+      `drop-shadow(
+        0 0 5px ${wire.color}
+      )`;
+
+    svg.appendChild(path);
+
+  });
+
+}
+
+$("newSafe").addEventListener(
+  "click",
+  startGame
+);
+
+$("difficulty").addEventListener(
+  "change",
+  startGame
+);
+
+$("clearSelection").addEventListener(
+  "click",
+  () => {
+
+    selectedLeft = null;
+
+    updateUI();
+
+  }
+);
+
+window.addEventListener(
+  "resize",
+  () => requestAnimationFrame(
+    drawConnections
+  )
+);
+
+startGame();
+
 })();
-</script></body></html>
+</script>
+
+</body>
+</html>
