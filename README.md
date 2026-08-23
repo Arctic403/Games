@@ -1,11 +1,17 @@
-# RiftCity Safecracking Standalone Prototype
+# RiftCity Safe Minigame Lab
 
-GitHub Pages-ready.
+Standalone GitHub Pages test build with seven switchable safecracking prototypes:
 
-Upload these files to the repo root:
-- index.html
-- style.css
-- app.js
-- README.md
+1. Manual Combination Dial
+2. Tumbler Alignment
+3. Sound-Wave Scanner
+4. Rotating Ring Lock
+5. Electronic Route
+6. Listen & Stop
+7. Combination Deduction
 
-Then enable GitHub Pages from Settings > Pages > Deploy from a branch > main > /(root).
+## GitHub Pages
+Upload all files to the root of a repository, then:
+Settings → Pages → Deploy from a branch → `main` → `/ (root)`.
+
+No backend or RiftCity project is required.

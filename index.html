@@ -1,1 +1,57 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RiftCity Safecracking Prototype</title><link rel="stylesheet" href="style.css"></head><body><main class="wrap"><section class="game"><div class="head"><div><div class="eyebrow">RIFTCITY CRIME PROTOTYPE</div><h1>Safecracking</h1><p>Crack a hidden 3-number combination in the correct direction: Left → Right → Left.</p></div><div class="stats"><div><span>Stage</span><b id="stage">1 / 3</b></div><div><span>Mistakes</span><b id="mistakes">0 / 3</b></div></div></div><div class="layout"><div class="safe"><div class="dialShell"><div id="pulse" class="pulse"></div><button id="dial" class="dial" aria-label="Safe dial" type="button"><div id="ticks" class="ticks"></div><div class="pointer"></div><div class="center"><div id="number" class="number">00</div><div id="direction" class="direction">TURN LEFT</div></div></button></div><div class="signalRow"><span>Signal</span><div class="track"><div id="signal" class="signal"></div></div><b id="signalText">Cold</b></div><div id="hint" class="hint">Rotate slowly and watch for stronger feedback.</div><div class="controls"><button id="left" type="button">◀ Left</button><button id="set" class="set" type="button">Set Number</button><button id="right" type="button">Right ▶</button></div><div id="result" class="result" aria-live="polite"></div></div><aside class="tuning"><div class="tuneHead"><div><div class="eyebrow">LIVE TUNING</div><h2>Settings</h2></div><button id="newSafe" type="button">New Safe</button></div><label>Difficulty<select id="difficulty"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option><option value="expert">Expert</option></select></label><label>Detection width <b id="widthVal">5</b><input id="width" type="range" min="2" max="12" value="5"></label><label>Dial step <b id="stepVal">1</b><input id="step" type="range" min="1" max="5" value="1"></label><label>Feedback strength <b id="feedbackVal">100%</b><input id="feedback" type="range" min="30" max="140" value="100"></label><label class="check"><span>Show debug combination</span><input id="debugToggle" type="checkbox"></label><div id="debug" class="debug hidden"></div><div class="help"><b>Controls</b><p>Drag/swipe the dial, use Left/Right buttons, or keyboard arrows. Press Set Number when you think you found the click zone.</p></div></aside></div></section></main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b10">
+<title>RiftCity Safe Minigame Lab</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">RIFTCITY • SAFECRACKING LAB</div>
+      <h1>Safe Minigame Tester</h1>
+      <p>Switch between prototypes and find which one actually feels good before it goes into the game.</p>
+    </div>
+    <button id="resetBtn" class="secondary">New / Reset Safe</button>
+  </header>
+
+  <nav id="modeTabs" class="mode-tabs" aria-label="Safe minigames"></nav>
+
+  <section class="hud">
+    <div><span>Mode</span><b id="hudMode">—</b></div>
+    <div><span>Difficulty</span><b id="hudDifficulty">Normal</b></div>
+    <div><span>Status</span><b id="hudStatus">Ready</b></div>
+  </section>
+
+  <section class="workspace">
+    <div class="game-card">
+      <div id="gameMount"></div>
+      <div id="result" class="result" aria-live="polite"></div>
+    </div>
+
+    <aside class="settings-card">
+      <div class="eyebrow">TEST SETTINGS</div>
+      <h2>Fine Tune</h2>
+      <label class="field">Difficulty
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="normal" selected>Normal</option>
+          <option value="hard">Hard</option>
+          <option value="expert">Expert</option>
+        </select>
+      </label>
+      <label class="check"><span>Show debug answer</span><input id="debugToggle" type="checkbox"></label>
+      <div id="debug" class="debug hidden"></div>
+      <div class="notes">
+        <b>Testing tip</b>
+        <p>Try every mode on both desktop and phone. Difficulty changes are deliberately obvious so we can decide later how mastery/tools should affect each mechanic.</p>
+      </div>
+    </aside>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
