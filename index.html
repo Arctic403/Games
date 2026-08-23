@@ -3,537 +3,731 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>RiftCity Animated Wire Bypass</title>
+<title>RiftCity Circuit Safe</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 :root{
   color-scheme:dark;
-  --bg:#06080c;
-  --panel:#0f141b;
-  --panel2:#151c25;
-  --border:#29333f;
-  --text:#f4f6f8;
-  --muted:#919ca9;
-  --good:#9ff0b6;
-  --bad:#ff9f9f;
+  --text:#f4f7fa;
+  --muted:#94a0ad;
+  --good:#9df0b6;
+  --bad:#ff8f8f;
 }
 
 html,body{
   margin:0;
   min-height:100%;
-  background:
-    radial-gradient(circle at top,#151c27 0%,#090c11 38%,#05070a 100%);
-  color:var(--text);
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top,#12221d,#07100d 48%,#040807);
+  color:var(--text);
 }
 
-body{padding:10px}
+body{
+  padding:8px;
+}
 
-button,select{font:inherit}
-button{cursor:pointer}
+button,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
 
 .app{
-  max-width:900px;
-  margin:0 auto;
+  width:min(100%,850px);
+  margin:auto;
 }
 
-.panel{
-  background:rgba(15,20,27,.97);
-  border:1px solid var(--border);
+.shell{
+  border:1px solid #29483c;
   border-radius:18px;
   overflow:hidden;
-  box-shadow:0 24px 70px rgba(0,0,0,.48);
+  background:#08110e;
+  box-shadow:0 24px 70px #0009;
 }
 
 .header{
-  padding:16px;
-  border-bottom:1px solid var(--border);
+  padding:13px;
   display:flex;
   justify-content:space-between;
-  gap:14px;
-  align-items:flex-start;
+  gap:12px;
+  border-bottom:1px solid #29483c;
+  background:#0c1713;
 }
 
 .kicker{
-  font-size:10px;
-  letter-spacing:.16em;
+  font-size:9px;
   font-weight:900;
-  color:var(--muted);
+  letter-spacing:.15em;
+  color:#789187;
 }
 
-h1{
-  margin:4px 0 6px;
-  font-size:22px;
+.header h1{
+  margin:3px 0;
+  font-size:19px;
 }
 
 .header p{
   margin:0;
-  color:#a6b0bd;
-  font-size:13px;
-}
-
-.build{
-  font-size:10px;
-  border:1px solid #35404c;
-  border-radius:999px;
-  padding:7px 9px;
-  white-space:nowrap;
-  color:#c2cad3;
+  font-size:11px;
+  color:#93a89f;
 }
 
 .toolbar{
-  padding:10px 12px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  background:#0a0e13;
-}
-
-select,.toolbar button{
-  min-height:42px;
-  border-radius:10px;
-  border:1px solid #34404d;
-  background:#151c25;
-  color:white;
-  padding:8px 11px;
-}
-
-.toolbar button{font-weight:800}
-
-.game{padding:14px}
-
-.safe{
-  border:1px solid #2a3440;
-  border-radius:16px;
-  background:linear-gradient(145deg,#171e27,#0a0e13);
-  padding:16px;
-  position:relative;
-  overflow:hidden;
-}
-
-.safe.powered{
-  animation:safePower .75s ease;
-}
-
-@keyframes safePower{
-  0%{box-shadow:0 0 0 rgba(160,255,190,0)}
-  40%{box-shadow:0 0 36px rgba(160,255,190,.28)}
-  100%{box-shadow:0 0 0 rgba(160,255,190,0)}
-}
-
-.safe-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:14px;
-}
-
-.safe-top h2{
-  margin:0 0 4px;
-  font-size:18px;
-}
-
-.sub{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.stats{
   display:flex;
   gap:7px;
+  padding:9px;
+  border-bottom:1px solid #29483c;
+}
+
+select,
+.toolbar button{
+  min-height:40px;
+  border-radius:9px;
+  border:1px solid #375348;
+  background:#0e1b17;
+  color:white;
+  padding:7px 10px;
+}
+
+.toolbar select{
+  flex:1;
+}
+
+.toolbar button{
+  font-weight:800;
+}
+
+.game{
+  padding:9px;
+}
+
+.safe{
+  position:relative;
+  padding:12px;
+  border-radius:15px;
+  border:2px solid #355f4d;
+
+  background:
+    radial-gradient(circle at 50% 45%,rgba(18,80,55,.18),transparent 40%),
+    linear-gradient(90deg,transparent 49.5%,rgba(213,171,70,.08) 50%,transparent 50.5%),
+    linear-gradient(rgba(213,171,70,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(213,171,70,.035) 1px,transparent 1px),
+    #092017;
+
+  background-size:
+    auto,
+    auto,
+    24px 24px,
+    24px 24px,
+    auto;
+
+  overflow:hidden;
+
+  box-shadow:
+    inset 0 0 35px #0008,
+    inset 0 0 0 1px #173d2c;
+}
+
+.safe::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0 16%,
+      rgba(217,174,73,.08) 16.3% 16.7%,
+      transparent 17% 33%,
+      rgba(217,174,73,.07) 33.3% 33.7%,
+      transparent 34% 64%,
+      rgba(217,174,73,.06) 64.3% 64.7%,
+      transparent 65%
+    );
+}
+
+.safe.shorting{
+  animation:shortBoard .18s linear 6;
+}
+
+@keyframes shortBoard{
+  0%,100%{
+    border-color:#355f4d;
+    filter:brightness(1);
+  }
+
+  50%{
+    border-color:#ff3838;
+    filter:
+      brightness(1.35)
+      saturate(1.4);
+    box-shadow:
+      inset 0 0 50px rgba(255,0,0,.32),
+      0 0 28px rgba(255,0,0,.25);
+  }
+}
+
+/* top HUD */
+
+.safe-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:9px;
+  position:relative;
+  z-index:4;
+}
+
+.safe-title{
+  font-weight:900;
+  font-size:14px;
+}
+
+.subtitle{
+  font-size:10px;
+  color:#8fa39a;
+  margin-top:2px;
+}
+
+.hud{
+  display:flex;
+  gap:6px;
   flex-wrap:wrap;
   justify-content:flex-end;
 }
 
 .chip{
-  background:#0b0f14;
-  border:1px solid #303b47;
+  min-width:72px;
+  text-align:center;
+  padding:6px 8px;
   border-radius:999px;
-  padding:7px 9px;
-  font-size:11px;
+  border:1px solid #385347;
+  background:#08130f;
+  font-size:10px;
 }
 
-.status-leds{
+.timer{
+  font-weight:950;
+  letter-spacing:.04em;
+}
+
+.timer.warning{
+  color:#ffd273;
+}
+
+.timer.danger{
+  color:#ff8585;
+  animation:timerPulse .45s ease-in-out infinite;
+}
+
+@keyframes timerPulse{
+  50%{
+    opacity:.45;
+  }
+}
+
+/* circuit LEDs */
+
+.leds{
   display:flex;
-  gap:7px;
-  margin-top:8px;
+  gap:5px;
+  margin-top:6px;
 }
 
 .led{
-  width:10px;
-  height:10px;
+  width:8px;
+  height:8px;
   border-radius:50%;
-  background:#28313b;
-  box-shadow:inset 0 0 0 1px #3a4552;
+  background:#173528;
+  box-shadow:inset 0 0 0 1px #315847;
 }
 
 .led.on{
-  background:#9ff0b6;
+  background:#7cf4a0;
+
   box-shadow:
-    0 0 8px #9ff0b6,
-    0 0 16px rgba(159,240,182,.35);
-  animation:ledPulse 1.2s ease-in-out infinite;
+    0 0 7px #7cf4a0,
+    0 0 13px #7cf4a066;
 }
 
-@keyframes ledPulse{
-  0%,100%{opacity:.75}
-  50%{opacity:1}
-}
+/* board */
 
-.wire-board{
+.board{
   position:relative;
+
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:90px;
-  min-height:430px;
+
+  gap:34px;
+
+  min-height:330px;
+
+  border:1px solid #2a5b45;
+  border-radius:13px;
+
+  padding:10px;
+
   background:
-    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
-    #080c11;
-  background-size:26px 26px;
-  border:1px solid #28323d;
-  border-radius:14px;
-  padding:18px;
+    radial-gradient(circle at 50% 50%,#0b2c20 0,#071a13 70%);
+
   overflow:hidden;
 }
 
+.trace-layer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.55;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 12%,
+      #b8893330 12.4%,
+      transparent 12.8%,
+      transparent 87%,
+      #b8893330 87.4%,
+      transparent 87.8%
+    );
+}
+
 .column{
+  z-index:4;
+
   display:flex;
   flex-direction:column;
-  justify-content:space-around;
-  gap:10px;
-  z-index:3;
+  justify-content:space-evenly;
+
+  gap:7px;
 }
 
 .column.right{
   align-items:flex-end;
 }
 
+/* terminals */
+
 .terminal{
   width:100%;
-  max-width:245px;
-  min-height:58px;
-  border:1px solid #36414e;
-  background:#121922;
-  border-radius:12px;
-  padding:8px 10px;
+  max-width:210px;
+
+  min-height:44px;
+
+  border:1px solid #365a4a;
+  border-radius:10px;
+
+  padding:6px 8px;
+
   display:flex;
+  gap:8px;
   align-items:center;
-  gap:10px;
+
+  color:white;
+
+  background:
+    linear-gradient(145deg,#11231d,#091610);
+
   transition:
     transform .12s ease,
+    opacity .15s ease,
     border-color .12s ease,
-    background .12s ease,
-    opacity .2s ease,
-    box-shadow .2s ease;
-  color:white;
-  position:relative;
-  overflow:hidden;
+    box-shadow .12s ease;
 }
 
-.right .terminal{
+.column.right .terminal{
   flex-direction:row-reverse;
 }
 
 .terminal.selected{
-  border-color:#f4f6f8;
   transform:scale(1.03);
-  background:#1c2632;
-  box-shadow:0 0 16px rgba(255,255,255,.12);
-  animation:selectedPulse .9s ease-in-out infinite;
+
+  border-color:#e8f6ef;
+
+  box-shadow:
+    0 0 12px #ffffff22,
+    inset 0 0 10px #ffffff0d;
+
+  animation:selectedPulse .75s ease-in-out infinite;
 }
 
 @keyframes selectedPulse{
-  0%,100%{box-shadow:0 0 10px rgba(255,255,255,.08)}
-  50%{box-shadow:0 0 22px rgba(255,255,255,.24)}
+  50%{
+    box-shadow:
+      0 0 22px #ffffff35;
+  }
 }
 
 .terminal.complete{
-  opacity:.58;
-  transform:scale(.985);
+  opacity:.54;
 }
 
-.terminal.complete::after{
-  content:"CONNECTED";
-  position:absolute;
-  right:8px;
-  bottom:4px;
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:.1em;
-  color:#9ff0b6;
-}
-
-.right .terminal.complete::after{
-  left:8px;
-  right:auto;
+.terminal:disabled{
+  cursor:default;
 }
 
 .socket{
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  border:3px solid rgba(255,255,255,.65);
   flex:0 0 auto;
-  box-shadow:
-    inset 0 0 0 3px rgba(0,0,0,.45),
-    0 0 12px rgba(255,255,255,.08);
-  position:relative;
-}
 
-.socket::after{
-  content:"";
-  position:absolute;
-  inset:4px;
+  width:19px;
+  height:19px;
+
   border-radius:50%;
-  background:rgba(255,255,255,.12);
+
+  border:3px solid #f0f5f0aa;
+
+  box-shadow:
+    inset 0 0 0 3px #0008,
+    0 0 7px currentColor;
 }
 
-.terminal.complete .socket{
-  animation:socketPower .8s ease;
+.label{
+  min-width:0;
 }
 
-@keyframes socketPower{
-  0%{transform:scale(1)}
-  40%{transform:scale(1.35)}
-  100%{transform:scale(1)}
+.name{
+  font-size:11px;
+  line-height:1.05;
+  font-weight:900;
 }
 
-.wire-label{
-  font-weight:850;
-  font-size:13px;
-}
-
-.wire-code{
-  font-size:10px;
-  color:#8995a3;
+.code{
+  font-size:9px;
+  color:#849a90;
   margin-top:2px;
 }
 
-.svg-layer{
+/* SVG wires */
+
+.wires{
   position:absolute;
   inset:0;
+
   width:100%;
   height:100%;
+
   pointer-events:none;
-  z-index:2;
+
+  z-index:3;
 }
 
-.wire-path{
+.wire{
   fill:none;
   stroke-width:5;
   stroke-linecap:round;
+
   stroke-dasharray:600;
   stroke-dashoffset:600;
+
   animation:
-    drawWire .45s ease forwards,
-    powerPulse .65s ease .45s;
+    drawWire .4s ease forwards,
+    wireCharge .7s ease .4s;
 }
 
 @keyframes drawWire{
-  to{stroke-dashoffset:0}
+  to{
+    stroke-dashoffset:0;
+  }
 }
 
-@keyframes powerPulse{
-  0%,100%{
-    opacity:.9;
-    stroke-width:5;
-  }
+@keyframes wireCharge{
   50%{
-    opacity:1;
     stroke-width:8;
+    filter:brightness(1.7);
   }
 }
 
-.energy-pulse{
+.power{
   fill:none;
   stroke:#fff;
+
   stroke-width:2;
-  stroke-linecap:round;
-  stroke-dasharray:6 16;
+
+  stroke-dasharray:5 16;
+
   opacity:0;
-  animation:energyTravel 1.2s linear .45s 2;
+
+  animation:
+    travel .95s linear .35s 2;
 }
 
-@keyframes energyTravel{
+@keyframes travel{
   0%{
-    stroke-dashoffset:80;
+    stroke-dashoffset:70;
     opacity:0;
   }
-  15%{opacity:.8}
-  85%{opacity:.8}
+
+  15%{
+    opacity:.9;
+  }
+
+  85%{
+    opacity:.9;
+  }
+
   100%{
-    stroke-dashoffset:-80;
+    stroke-dashoffset:-70;
     opacity:0;
   }
 }
 
-.spark{
-  position:absolute;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#fff;
-  pointer-events:none;
-  z-index:8;
-  box-shadow:
-    0 0 8px #fff,
-    0 0 14px #ffb366,
-    0 0 20px #ff5b5b;
-  animation:sparkOut .4s ease forwards;
-}
+/* short overlay */
 
-@keyframes sparkOut{
-  0%{
-    transform:translate(0,0) scale(1);
-    opacity:1;
-  }
-  100%{
-    transform:translate(var(--x),var(--y)) scale(.1);
-    opacity:0;
-  }
-}
-
-.wrong{
-  animation:wrongShake .28s ease;
-  border-color:#b75f68!important;
-  box-shadow:0 0 20px rgba(255,80,80,.24);
-}
-
-@keyframes wrongShake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-6px)}
-  50%{transform:translateX(6px)}
-  75%{transform:translateX(-4px)}
-  100%{transform:translateX(0)}
-}
-
-.panel-flicker{
-  animation:flicker .45s ease;
-}
-
-@keyframes flicker{
-  0%,100%{filter:brightness(1)}
-  30%{filter:brightness(1.65)}
-  50%{filter:brightness(.75)}
-  70%{filter:brightness(1.4)}
-}
-
-.unlock-overlay{
+.short-overlay{
   position:absolute;
   inset:0;
+
+  z-index:20;
+
+  background:rgba(180,0,0,.18);
+
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(5,10,8,.88);
-  z-index:20;
+
   opacity:0;
   pointer-events:none;
-  transition:opacity .25s ease;
 }
 
-.unlock-overlay.show{
+.short-overlay.show{
   opacity:1;
+
+  animation:
+    redBlink .15s linear infinite;
 }
 
-.unlock-box{
-  border:1px solid #4e6f59;
-  background:#0d1711;
-  border-radius:14px;
-  padding:20px 26px;
-  text-align:center;
-  transform:scale(.85);
-  opacity:0;
-}
-
-.unlock-overlay.show .unlock-box{
-  animation:unlockPop .45s ease forwards .15s;
-}
-
-@keyframes unlockPop{
-  to{
-    transform:scale(1);
-    opacity:1;
+@keyframes redBlink{
+  50%{
+    background:rgba(255,0,0,.38);
   }
 }
 
-.unlock-title{
-  font-size:24px;
+.short-message{
+  padding:10px 16px;
+
+  border:1px solid #ff6b6b;
+
+  border-radius:10px;
+
+  background:#300909dd;
+
   font-weight:950;
-  color:#9ff0b6;
+
+  letter-spacing:.08em;
+
+  color:#ffb1b1;
+
+  transform:scale(.9);
 }
 
-.unlock-sub{
-  color:#a9b7ad;
-  font-size:12px;
-  margin-top:5px;
+.short-overlay.show .short-message{
+  animation:shortText .2s ease forwards;
 }
+
+@keyframes shortText{
+  to{
+    transform:scale(1);
+  }
+}
+
+/* sparks */
+
+.spark{
+  position:absolute;
+
+  width:5px;
+  height:5px;
+
+  border-radius:50%;
+
+  background:white;
+
+  z-index:25;
+
+  pointer-events:none;
+
+  box-shadow:
+    0 0 7px white,
+    0 0 12px #ff4433;
+
+  animation:spark .45s ease-out forwards;
+}
+
+@keyframes spark{
+  to{
+    transform:
+      translate(var(--x),var(--y))
+      scale(.1);
+
+    opacity:0;
+  }
+}
+
+/* actions */
 
 .actions{
   display:flex;
   justify-content:center;
-  margin-top:14px;
+
+  margin-top:9px;
 }
 
-.reset-btn{
-  border:1px solid #36414d;
-  background:#161e27;
+.clear{
+  min-height:40px;
+
+  padding:7px 12px;
+
+  border-radius:9px;
+
+  border:1px solid #355447;
+
+  background:#0d1b16;
+
   color:white;
-  min-height:44px;
-  border-radius:11px;
-  padding:9px 14px;
-  font-weight:850;
+
+  font-weight:800;
 }
 
 .result{
-  min-height:36px;
+  min-height:29px;
+
   text-align:center;
-  margin-top:10px;
-  font-weight:850;
-  font-size:13px;
+
+  margin-top:7px;
+
+  font-size:11px;
+
+  font-weight:900;
 }
 
-.result.good{color:var(--good)}
-.result.bad{color:var(--bad)}
+.result.good{
+  color:var(--good);
+}
 
-@media(max-width:680px){
-  body{padding:6px}
+.result.bad{
+  color:var(--bad);
+}
 
-  .header,
-  .safe-top{
+/* success */
+
+.unlock{
+  position:absolute;
+  inset:0;
+
+  z-index:30;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#041109e8;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:opacity .25s ease;
+}
+
+.unlock.show{
+  opacity:1;
+}
+
+.unlock-box{
+  padding:18px 22px;
+
+  border:1px solid #4a8864;
+
+  border-radius:13px;
+
+  background:#092015;
+
+  text-align:center;
+
+  transform:scale(.8);
+}
+
+.unlock.show .unlock-box{
+  animation:unlock .4s ease forwards;
+}
+
+@keyframes unlock{
+  to{
+    transform:scale(1);
+  }
+}
+
+.unlock-title{
+  color:#a4f5ba;
+
+  font-size:22px;
+
+  font-weight:950;
+}
+
+.unlock-sub{
+  margin-top:4px;
+
+  font-size:10px;
+
+  color:#8ba596;
+}
+
+/* compact hard layout */
+
+.safe.hard .board{
+  min-height:365px;
+}
+
+.safe.hard .terminal{
+  min-height:42px;
+  padding:5px 7px;
+}
+
+.safe.hard .column{
+  gap:4px;
+}
+
+.safe.hard .name{
+  font-size:10px;
+}
+
+.safe.hard .code{
+  font-size:8px;
+}
+
+@media(max-width:600px){
+
+  .header{
     flex-direction:column;
   }
 
-  .stats{
+  .safe-head{
+    flex-direction:column;
+  }
+
+  .hud{
     justify-content:flex-start;
   }
 
-  .wire-board{
-    gap:28px;
-    min-height:400px;
-    padding:10px;
+  .board{
+    gap:20px;
+    padding:7px;
+    min-height:310px;
   }
 
   .terminal{
-    padding:7px;
-    min-height:54px;
+    padding:5px 6px;
   }
 
-  .wire-label{
-    font-size:11px;
-  }
-
-  .wire-code{
-    font-size:9px;
-  }
-
-  .socket{
-    width:18px;
-    height:18px;
+  .safe.hard .board{
+    min-height:345px;
   }
 }
 </style>
@@ -543,26 +737,24 @@ select,.toolbar button{
 
 <main class="app">
 
-<section class="panel">
+<section class="shell">
 
 <header class="header">
 
 <div>
+
 <div class="kicker">
-RIFTCITY CRIME PROTOTYPE
+RIFTCITY SAFE BYPASS
 </div>
 
 <h1>
-Animated Electronic Safe Bypass
+Circuit Wire Match
 </h1>
 
 <p>
-Match the circuits and bring the access panel online.
+Match every circuit before the bypass window closes.
 </p>
-</div>
 
-<div class="build">
-ANIMATED WIRE BUILD
 </div>
 
 </header>
@@ -585,7 +777,9 @@ Hard — 6 wires
 
 </select>
 
-<button id="newSafe" type="button">
+<button
+id="newSafe"
+type="button">
 New Safe
 </button>
 
@@ -593,53 +787,72 @@ New Safe
 
 <div class="game">
 
-<section id="safe" class="safe">
+<section
+id="safe"
+class="safe">
 
-<div class="safe-top">
+<div class="safe-head">
 
 <div>
 
-<h2>
-Access Panel
-</h2>
-
-<div class="sub">
-Select a circuit on the left, then tap its matching port.
+<div class="safe-title">
+ACCESS CIRCUIT
 </div>
 
-<div id="leds" class="status-leds"></div>
-
+<div class="subtitle">
+Tap a wire, then its matching port.
 </div>
 
-<div class="stats">
-
-<div id="matchedChip" class="chip">
-Matched 0 / 4
-</div>
-
-<div id="mistakeChip" class="chip">
-Mistakes 0 / 3
+<div
+id="leds"
+class="leds">
 </div>
 
 </div>
 
+<div class="hud">
+
+<div
+id="timer"
+class="chip timer">
+00:24
 </div>
 
-<div id="board" class="wire-board">
+<div
+id="matched"
+class="chip">
+0 / 4
+</div>
+
+<div
+id="mistakes"
+class="chip">
+0 / 3
+</div>
+
+</div>
+
+</div>
+
+<div
+id="board"
+class="board">
+
+<div class="trace-layer">
+</div>
 
 <svg
 id="svg"
-class="svg-layer"
-preserveAspectRatio="none">
+class="wires">
 </svg>
 
 <div
-id="leftColumn"
+id="left"
 class="column">
 </div>
 
 <div
-id="rightColumn"
+id="right"
 class="column right">
 </div>
 
@@ -648,8 +861,8 @@ class="column right">
 <div class="actions">
 
 <button
-id="clearSelection"
-class="reset-btn"
+id="clear"
+class="clear"
 type="button">
 Clear Selection
 </button>
@@ -663,8 +876,18 @@ aria-live="polite">
 </div>
 
 <div
-id="unlockOverlay"
-class="unlock-overlay">
+id="shortOverlay"
+class="short-overlay">
+
+<div class="short-message">
+CIRCUIT SHORT
+</div>
+
+</div>
+
+<div
+id="unlock"
+class="unlock">
 
 <div class="unlock-box">
 
@@ -673,7 +896,7 @@ SAFE UNLOCKED
 </div>
 
 <div class="unlock-sub">
-Electronic bypass accepted.
+Electronic bypass complete
 </div>
 
 </div>
@@ -691,75 +914,108 @@ Electronic bypass accepted.
 <script>
 (() => {
 
-const $ = id =>
-  document.getElementById(id);
+const $ =
+  id =>
+    document.getElementById(id);
 
-const COLORS = [
+const WIRES = [
 
 {
   id:"red",
   name:"Red",
-  color:"#e55353",
+  color:"#ee5555",
   code:"A1"
 },
 
 {
   id:"blue",
   name:"Blue",
-  color:"#4e8fe8",
+  color:"#52a1ff",
   code:"B7"
 },
 
 {
   id:"green",
   name:"Green",
-  color:"#55b978",
+  color:"#5bd982",
   code:"C4"
 },
 
 {
   id:"yellow",
   name:"Yellow",
-  color:"#d9b94b",
+  color:"#e4c34f",
   code:"D2"
 },
 
 {
   id:"purple",
   name:"Purple",
-  color:"#a672df",
+  color:"#ad77e8",
   code:"E8"
 },
 
 {
   id:"orange",
   name:"Orange",
-  color:"#d98547",
+  color:"#e98b47",
   code:"F3"
 }
 
 ];
 
+const SETTINGS = {
+
+easy:{
+  count:3,
+  time:30,
+  mistakes:99,
+  short:800
+},
+
+normal:{
+  count:4,
+  time:24,
+  mistakes:3,
+  short:1000
+},
+
+hard:{
+  count:6,
+  time:18,
+  mistakes:2,
+  short:1250
+}
+
+};
+
 let wires = [];
 
 let rightOrder = [];
 
-let selectedLeft = null;
+let selected = null;
 
-let matched = new Set();
+let connected =
+  new Set();
 
-let mistakes = 0;
+let mistakeCount = 0;
 
 let locked = false;
 
-function shuffle(array){
+let shorted = false;
 
-  const result =
-    [...array];
+let timerHandle = null;
+
+let deadline = 0;
+
+function shuffle(arr){
+
+  const out =
+    [...arr];
 
   for(
     let i =
-      result.length - 1;
+      out.length - 1;
     i > 0;
     i--
   ){
@@ -771,129 +1027,123 @@ function shuffle(array){
       );
 
     [
-      result[i],
-      result[j]
+      out[i],
+      out[j]
     ] = [
-      result[j],
-      result[i]
+      out[j],
+      out[i]
     ];
 
   }
 
-  return result;
+  return out;
 
 }
 
-function getWireCount(){
+function settings(){
 
-  const value =
-    $("difficulty").value;
-
-  if(value === "easy"){
-    return 3;
-  }
-
-  if(value === "hard"){
-    return 6;
-  }
-
-  return 4;
+  return SETTINGS[
+    $("difficulty").value
+  ];
 
 }
 
-function maxMistakes(){
+function start(){
 
-  const value =
-    $("difficulty").value;
+  clearInterval(
+    timerHandle
+  );
 
-  if(value === "easy"){
-    return 99;
-  }
+  selected = null;
 
-  if(value === "hard"){
-    return 2;
-  }
+  connected =
+    new Set();
 
-  return 3;
-
-}
-
-function startGame(){
+  mistakeCount = 0;
 
   locked = false;
 
-  selectedLeft = null;
+  shorted = false;
 
-  matched = new Set();
+  $("shortOverlay")
+    .classList
+    .remove("show");
 
-  mistakes = 0;
-
-  $("unlockOverlay")
+  $("unlock")
     .classList
     .remove("show");
 
   $("safe")
     .classList
-    .remove("powered");
+    .remove(
+      "shorting",
+      "hard"
+    );
 
-  const count =
-    getWireCount();
+  const cfg =
+    settings();
+
+  if(
+    $("difficulty").value ===
+    "hard"
+  ){
+
+    $("safe")
+      .classList
+      .add("hard");
+
+  }
 
   wires =
-    COLORS.slice(0,count);
+    WIRES.slice(
+      0,
+      cfg.count
+    );
 
   rightOrder =
-    shuffle(wires);
+    shuffle(
+      wires
+    );
 
   renderTerminals();
 
   renderLEDs();
 
+  setMessage("");
+
+  deadline =
+    performance.now() +
+    cfg.time * 1000;
+
+  timerHandle =
+    setInterval(
+      updateTimer,
+      50
+    );
+
+  updateTimer();
+
   updateUI();
 
-  drawConnections();
-
-  setMessage("");
+  requestAnimationFrame(
+    drawWires
+  );
 
 }
 
-function renderTerminals(){
+function renderLEDs(){
 
-  const left =
-    $("leftColumn");
-
-  const right =
-    $("rightColumn");
-
-  left.innerHTML = "";
-
-  right.innerHTML = "";
-
-  wires.forEach(
-    wire => {
-
-      left.appendChild(
-        buildTerminal(
-          wire,
-          "left"
+  $("leds")
+    .innerHTML =
+      wires
+        .map(
+          w =>
+            `<span
+              class="led"
+              data-led="${w.id}">
+            </span>`
         )
-      );
-
-    }
-  );
-
-  rightOrder.forEach(
-    wire => {
-
-      right.appendChild(
-        buildTerminal(
-          wire,
-          "right"
-        )
-      );
-
-    }
-  );
+        .join("");
 
 }
 
@@ -902,51 +1152,48 @@ function buildTerminal(
   side
 ){
 
-  const button =
-    document.createElement(
-      "button"
-    );
+  const btn =
+    document
+      .createElement(
+        "button"
+      );
 
-  button.type =
+  btn.type =
     "button";
 
-  button.className =
+  btn.className =
     "terminal";
 
-  button.dataset.side =
-    side;
-
-  button.dataset.id =
+  btn.dataset.id =
     wire.id;
 
-  button.innerHTML = `
+  btn.dataset.side =
+    side;
+
+  btn.innerHTML = `
 
     <span
       class="socket"
       style="
         background:
-        ${wire.color}
+        ${wire.color};
+        color:
+        ${wire.color};
       ">
     </span>
 
-    <span>
+    <span class="label">
 
-      <div
-        class="wire-label">
+      <div class="name">
+        ${wire.name}
         ${
           side === "left"
-          ? wire.name + " Wire"
-          : wire.name + " Port"
+          ? "Wire"
+          : "Port"
         }
       </div>
 
-      <div
-        class="wire-code">
-        ${
-          side === "left"
-          ? "Circuit"
-          : "Terminal"
-        }
+      <div class="code">
         ${wire.code}
       </div>
 
@@ -954,21 +1201,21 @@ function buildTerminal(
 
   `;
 
-  button.addEventListener(
+  btn.addEventListener(
     "click",
     () => {
 
       if(side === "left"){
 
-        selectLeft(
+        chooseWire(
           wire.id
         );
 
       }else{
 
-        selectRight(
+        choosePort(
           wire.id,
-          button
+          btn
         );
 
       }
@@ -976,69 +1223,94 @@ function buildTerminal(
     }
   );
 
-  return button;
+  return btn;
 
 }
 
-function renderLEDs(){
+function renderTerminals(){
 
-  $("leds").innerHTML =
-    wires
-      .map(
-        wire =>
-          `<span
-             class="led"
-             data-led="${wire.id}">
-           </span>`
-      )
-      .join("");
+  $("left").innerHTML = "";
+
+  $("right").innerHTML = "";
+
+  wires.forEach(
+    wire =>
+      $("left")
+        .appendChild(
+          buildTerminal(
+            wire,
+            "left"
+          )
+        )
+  );
+
+  rightOrder.forEach(
+    wire =>
+      $("right")
+        .appendChild(
+          buildTerminal(
+            wire,
+            "right"
+          )
+        )
+  );
 
 }
 
-function selectLeft(id){
+function chooseWire(id){
 
   if(
     locked ||
-    matched.has(id)
+    shorted ||
+    connected.has(id)
   ){
     return;
   }
 
-  selectedLeft = id;
+  selected = id;
 
   updateUI();
 
 }
 
-function selectRight(
+function choosePort(
   id,
-  terminal
+  element
 ){
 
   if(
     locked ||
-    !selectedLeft ||
-    matched.has(id)
+    shorted ||
+    !selected ||
+    connected.has(id)
   ){
     return;
   }
 
   if(
-    selectedLeft === id
+    selected === id
   ){
 
-    const connectedId =
-      selectedLeft;
+    const newlyConnected =
+      selected;
 
-    matched.add(
-      connectedId
+    connected.add(
+      newlyConnected
     );
 
-    selectedLeft =
-      null;
+    selected = null;
 
     activateLED(
-      connectedId
+      newlyConnected
+    );
+
+    updateUI();
+
+    requestAnimationFrame(
+      () =>
+        drawWires(
+          newlyConnected
+        )
     );
 
     setMessage(
@@ -1046,139 +1318,176 @@ function selectRight(
       true
     );
 
-    updateUI();
-
-    requestAnimationFrame(
-      () => {
-
-        drawConnections(
-          connectedId
-        );
-
-      }
-    );
-
     if(
-      matched.size ===
+      connected.size ===
       wires.length
     ){
 
-      locked = true;
-
-      completeSequence();
+      complete();
 
     }
 
     return;
   }
 
-  mistakes++;
-
-  selectedLeft = null;
-
-  wrongAnimation(
-    terminal
+  wrongConnection(
+    element
   );
 
-  sparkAtTerminal(
-    terminal
-  );
+}
 
-  setMessage(
-    "Wrong terminal.",
-    false
-  );
+function wrongConnection(
+  element
+){
 
-  const max =
-    maxMistakes();
+  mistakeCount++;
 
-  if(
-    mistakes >= max
-  ){
-
-    locked = true;
-
-    setMessage(
-      "ALARM TRIGGERED — BYPASS FAILED",
-      false
-    );
-
-  }
+  selected = null;
 
   updateUI();
 
+  spark(
+    element
+  );
+
+  shortCircuit();
+
+  if(
+    mistakeCount >=
+    settings().mistakes
+  ){
+
+    if(
+      settings().mistakes < 50
+    ){
+
+      locked = true;
+
+      setTimeout(
+        () =>
+          fail(
+            "ALARM TRIGGERED"
+          ),
+        settings().short
+      );
+
+    }
+
+  }
+
 }
 
-function wrongAnimation(
-  terminal
-){
+function shortCircuit(){
 
-  terminal
-    .classList
-    .remove("wrong");
-
-  void terminal.offsetWidth;
-
-  terminal
-    .classList
-    .add("wrong");
+  shorted = true;
 
   $("safe")
     .classList
-    .remove("panel-flicker");
+    .remove(
+      "shorting"
+    );
 
-  void $("safe").offsetWidth;
+  void $("safe")
+    .offsetWidth;
 
   $("safe")
     .classList
-    .add("panel-flicker");
+    .add(
+      "shorting"
+    );
+
+  $("shortOverlay")
+    .classList
+    .add(
+      "show"
+    );
+
+  setMessage(
+    "Circuit short — controls locked.",
+    false
+  );
+
+  updateUI();
+
+  setTimeout(
+    () => {
+
+      $("shortOverlay")
+        .classList
+        .remove(
+          "show"
+        );
+
+      $("safe")
+        .classList
+        .remove(
+          "shorting"
+        );
+
+      if(!locked){
+
+        shorted = false;
+
+        setMessage(
+          "System recovered.",
+          true
+        );
+
+        updateUI();
+
+      }
+
+    },
+    settings().short
+  );
 
 }
 
-function sparkAtTerminal(
+function spark(
   terminal
 ){
 
   const board =
     $("board");
 
-  const boardRect =
+  const br =
     board
       .getBoundingClientRect();
 
-  const rect =
+  const tr =
     terminal
       .getBoundingClientRect();
 
-  const baseX =
-    rect.left +
-    rect.width / 2 -
-    boardRect.left;
+  const x =
+    tr.left +
+    tr.width / 2 -
+    br.left;
 
-  const baseY =
-    rect.top +
-    rect.height / 2 -
-    boardRect.top;
+  const y =
+    tr.top +
+    tr.height / 2 -
+    br.top;
 
   for(
     let i = 0;
-    i < 9;
+    i < 10;
     i++
   ){
 
-    const spark =
-      document.createElement(
-        "span"
-      );
+    const s =
+      document
+        .createElement(
+          "span"
+        );
 
-    spark.className =
+    s.className =
       "spark";
 
-    spark.style.left =
-      baseX + "px";
+    s.style.left =
+      x + "px";
 
-    spark.style.top =
-      baseY + "px";
+    s.style.top =
+      y + "px";
 
     const angle =
       Math.random() *
@@ -1186,11 +1495,11 @@ function sparkAtTerminal(
       2;
 
     const distance =
-      25 +
+      20 +
       Math.random() *
-      30;
+      32;
 
-    spark.style
+    s.style
       .setProperty(
         "--x",
         Math.cos(angle) *
@@ -1198,7 +1507,7 @@ function sparkAtTerminal(
         "px"
       );
 
-    spark.style
+    s.style
       .setProperty(
         "--y",
         Math.sin(angle) *
@@ -1207,13 +1516,13 @@ function sparkAtTerminal(
       );
 
     board.appendChild(
-      spark
+      s
     );
 
     setTimeout(
       () =>
-        spark.remove(),
-      450
+        s.remove(),
+      500
     );
 
   }
@@ -1222,14 +1531,131 @@ function sparkAtTerminal(
 
 function activateLED(id){
 
-  const led =
+  const el =
     document.querySelector(
       `[data-led="${id}"]`
     );
 
-  if(led){
-    led.classList.add("on");
+  if(el){
+
+    el.classList
+      .add("on");
+
   }
+
+}
+
+function updateTimer(){
+
+  if(locked){
+    return;
+  }
+
+  const remaining =
+    Math.max(
+      0,
+      deadline -
+      performance.now()
+    );
+
+  const seconds =
+    remaining / 1000;
+
+  $("timer")
+    .textContent =
+      seconds
+        .toFixed(1)
+        .padStart(
+          4,
+          "0"
+        ) + "s";
+
+  $("timer")
+    .classList
+    .toggle(
+      "warning",
+      seconds <= 8 &&
+      seconds > 4
+    );
+
+  $("timer")
+    .classList
+    .toggle(
+      "danger",
+      seconds <= 4
+    );
+
+  if(
+    remaining <= 0
+  ){
+
+    fail(
+      "BYPASS WINDOW EXPIRED"
+    );
+
+  }
+
+}
+
+function complete(){
+
+  locked = true;
+
+  clearInterval(
+    timerHandle
+  );
+
+  updateUI();
+
+  setMessage(
+    "All circuits online...",
+    true
+  );
+
+  setTimeout(
+    () => {
+
+      $("unlock")
+        .classList
+        .add(
+          "show"
+        );
+
+    },
+    500
+  );
+
+}
+
+function fail(message){
+
+  if(
+    $("unlock")
+      .classList
+      .contains("show")
+  ){
+    return;
+  }
+
+  locked = true;
+
+  shorted = false;
+
+  clearInterval(
+    timerHandle
+  );
+
+  $("shortOverlay")
+    .classList
+    .remove("show");
+
+  setMessage(
+    message +
+    " — SAFE LOCKED",
+    false
+  );
+
+  updateUI();
 
 }
 
@@ -1240,53 +1666,57 @@ function updateUI(){
       ".terminal"
     )
     .forEach(
-      button => {
+      btn => {
 
         const id =
-          button.dataset.id;
+          btn.dataset.id;
 
         const side =
-          button.dataset.side;
+          btn.dataset.side;
 
-        button
-          .classList
+        btn.classList
           .toggle(
             "complete",
-            matched.has(id)
+            connected.has(id)
           );
 
-        button
-          .classList
+        btn.classList
           .toggle(
             "selected",
             side === "left" &&
-            selectedLeft === id
+            selected === id
           );
 
-        button.disabled =
+        btn.disabled =
           locked ||
-          matched.has(id);
+          shorted ||
+          connected.has(id);
 
       }
     );
 
-  $("matchedChip")
+  $("matched")
     .textContent =
-      `Matched ${matched.size} / ${wires.length}`;
+      `${connected.size} / ${wires.length}`;
 
   const max =
-    maxMistakes();
+    settings().mistakes;
 
-  $("mistakeChip")
+  $("mistakes")
     .textContent =
       max > 50
-      ? `Mistakes ${mistakes}`
-      : `Mistakes ${mistakes} / ${max}`;
+      ? `${mistakeCount} mistakes`
+      : `${mistakeCount} / ${max}`;
+
+  $("clear").disabled =
+    locked ||
+    shorted ||
+    !selected;
 
 }
 
-function drawConnections(
-  newestId = null
+function drawWires(
+  newest = null
 ){
 
   const svg =
@@ -1295,13 +1725,13 @@ function drawConnections(
   const board =
     $("board");
 
-  const boardRect =
+  const br =
     board
       .getBoundingClientRect();
 
   svg.innerHTML = "";
 
-  matched.forEach(
+  connected.forEach(
     id => {
 
       const left =
@@ -1321,12 +1751,6 @@ function drawConnections(
         return;
       }
 
-      const wire =
-        wires.find(
-          w =>
-            w.id === id
-        );
-
       const lr =
         left
           .getBoundingClientRect();
@@ -1337,40 +1761,48 @@ function drawConnections(
 
       const x1 =
         lr.right -
-        boardRect.left;
+        br.left;
 
       const y1 =
         lr.top +
         lr.height / 2 -
-        boardRect.top;
+        br.top;
 
       const x2 =
         rr.left -
-        boardRect.left;
+        br.left;
 
       const y2 =
         rr.top +
         rr.height / 2 -
-        boardRect.top;
+        br.top;
 
       const mid =
-        (x1 + x2) / 2;
+        (x1 + x2) /
+        2;
 
-      const pathData =
+      const d =
         `M ${x1} ${y1}
          C ${mid} ${y1},
            ${mid} ${y2},
            ${x2} ${y2}`;
 
-      const path =
-        document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "path"
+      const wire =
+        wires.find(
+          w =>
+            w.id === id
         );
+
+      const path =
+        document
+          .createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+          );
 
       path.setAttribute(
         "d",
-        pathData
+        d
       );
 
       path.setAttribute(
@@ -1378,13 +1810,12 @@ function drawConnections(
         wire.color
       );
 
-      path.classList.add(
-        "wire-path"
-      );
+      path.classList
+        .add("wire");
 
       path.style.filter =
         `drop-shadow(
-          0 0 5px
+          0 0 4px
           ${wire.color}
         )`;
 
@@ -1393,23 +1824,25 @@ function drawConnections(
       );
 
       if(
-        id === newestId
+        id === newest
       ){
 
         const pulse =
-          document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path"
-          );
+          document
+            .createElementNS(
+              "http://www.w3.org/2000/svg",
+              "path"
+            );
 
         pulse.setAttribute(
           "d",
-          pathData
+          d
         );
 
-        pulse.classList.add(
-          "energy-pulse"
-        );
+        pulse.classList
+          .add(
+            "power"
+          );
 
         svg.appendChild(
           pulse
@@ -1422,94 +1855,62 @@ function drawConnections(
 
 }
 
-function completeSequence(){
-
-  setMessage(
-    "All circuits online...",
-    true
-  );
-
-  $("safe")
-    .classList
-    .add(
-      "panel-flicker"
-    );
-
-  setTimeout(
-    () => {
-
-      $("safe")
-        .classList
-        .add(
-          "powered"
-        );
-
-    },
-    250
-  );
-
-  setTimeout(
-    () => {
-
-      $("unlockOverlay")
-        .classList
-        .add(
-          "show"
-        );
-
-    },
-    650
-  );
-
-}
-
 function setMessage(
-  message,
+  text,
   good = null
 ){
 
-  const element =
-    $("result");
+  $("result")
+    .textContent =
+      text;
 
-  element.textContent =
-    message;
-
-  element.className =
-    "result";
+  $("result")
+    .className =
+      "result";
 
   if(good === true){
-    element
+
+    $("result")
       .classList
       .add("good");
+
   }
 
   if(good === false){
-    element
+
+    $("result")
       .classList
       .add("bad");
+
   }
 
 }
-
-$("newSafe")
-  .addEventListener(
-    "click",
-    startGame
-  );
 
 $("difficulty")
   .addEventListener(
     "change",
-    startGame
+    start
   );
 
-$("clearSelection")
+$("newSafe")
+  .addEventListener(
+    "click",
+    start
+  );
+
+$("clear")
   .addEventListener(
     "click",
     () => {
 
-      selectedLeft =
-        null;
+      if(
+        locked ||
+        shorted
+      ){
+        return;
+      }
+
+      selected = null;
 
       updateUI();
 
@@ -1522,11 +1923,11 @@ window
     () =>
       requestAnimationFrame(
         () =>
-          drawConnections()
+          drawWires()
       )
   );
 
-startGame();
+start();
 
 })();
 </script>
