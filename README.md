@@ -1,12 +1,16 @@
-# RiftCity Circuit Safe — Atlas-Aligned Mobile Build
+# RiftCity Circuit Safe — Selected Neutral Board Set
 
-Standalone GitHub Pages prototype.
+Standalone GitHub Pages prototype using the user-selected neutral 3 / 4 / 6 board set.
 
 Assets:
 - index.html
-- assets/circuit-board-atlas.png (source/reference atlas)
+- assets/circuit-board-atlas.png (selected source image)
 - assets/circuit-board-3.png
 - assets/circuit-board-4.png
 - assets/circuit-board-6.png
 
-The 3/4 variants are normalized from the correct six-slot neutral board so the actual number of socket rows matches the difficulty. All wire/socket/LED colors, connections, short flashes and success lighting are runtime overlays — nothing active is baked into the backgrounds.
+Notes:
+- The chosen boards are neutral hardware only.
+- Socket colors, status LEDs, animated wires, short flashes, and unlock effects are runtime overlays.
+- Terminal overlay positions were retuned to the actual socket centers of the selected 3 / 4 / 6 boards.
+- Mobile sizing remains compact, with portrait boards and touch targets preserved.

@@ -17,7 +17,7 @@ button,select{font:inherit}button{cursor:pointer}
 .toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;padding:7px 8px;border-bottom:1px solid #2b4337;background:#09110d}select,.toolbar button,.clear{min-height:38px;border:1px solid #3a5346;background:#0f1b15;color:#fff;border-radius:8px;padding:6px 9px;font-weight:800}.toolbar button{min-width:92px}
 .game{padding:7px}.safe{position:relative;border:1px solid #3a5949;border-radius:12px;background:#06100b;padding:6px;overflow:hidden}.safe.shorting{animation:shortBoard .15s linear 7}@keyframes shortBoard{50%{border-color:#ff3838;filter:brightness(1.38) saturate(1.35);box-shadow:inset 0 0 48px #ff000048,0 0 24px #ff000036}}
 .board{position:relative;width:100%;background-position:center;background-size:100% 100%;background-repeat:no-repeat;overflow:hidden;border-radius:9px;isolation:isolate}
-.board.easy{aspect-ratio:833/558;background-image:url("assets/circuit-board-3.png")}.board.normal{aspect-ratio:833/708;background-image:url("assets/circuit-board-4.png")}.board.hard{aspect-ratio:833/955;background-image:url("assets/circuit-board-6.png")}
+.board.easy{aspect-ratio:435/558;background-image:url("assets/circuit-board-3.png")}.board.normal{aspect-ratio:420/682;background-image:url("assets/circuit-board-4.png")}.board.hard{aspect-ratio:483/872;background-image:url("assets/circuit-board-6.png")}
 .board::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(circle at center,transparent 55%,rgba(0,0,0,.10) 100%)}
 .statusRail{position:absolute;z-index:5;left:50%;top:5.8%;transform:translateX(-50%);display:flex;gap:4px;padding:3px 5px;border-radius:999px;background:rgba(5,10,7,.58);border:1px solid rgba(170,180,172,.25);backdrop-filter:blur(1px)}
 .led{width:8px;height:8px;border-radius:50%;background:#242a27;border:1px solid #59605c;transition:.16s}.led.on{background:var(--c);border-color:var(--c);box-shadow:0 0 7px var(--c),0 0 13px var(--c);animation:ledPulse .9s ease-in-out infinite}@keyframes ledPulse{50%{filter:brightness(1.55);transform:scale(1.12)}}
@@ -61,9 +61,9 @@ const WIRES=[
 ];
 const SETTINGS={easy:{count:3,time:30,mistakes:99,short:800},normal:{count:4,time:24,mistakes:3,short:1000},hard:{count:6,time:18,mistakes:2,short:1250}};
 const POS={
- easy:{leftX:17.2,rightX:82.7,ys:[22.4,49.2,76.0]},
- normal:{leftX:17.2,rightX:82.7,ys:[17.6,38.8,59.9,81.0]},
- hard:{leftX:17.2,rightX:82.7,ys:[13.1,28.8,44.4,60.1,75.5,91.0]}
+ easy:{leftX:18.0,rightX:81.6,ys:[24.2,46.9,69.7]},
+ normal:{leftX:18.8,rightX:81.9,ys:[18.8,37.0,55.1,73.2]},
+ hard:{leftX:18.0,rightX:82.2,ys:[14.6,28.1,41.3,54.4,67.6,81.0]}
 };
 let wires=[],rightOrder=[],selected=null,connected=new Set(),mistakeCount=0,locked=false,shorted=false,timerHandle=null,deadline=0;
 const cfg=()=>SETTINGS[$("difficulty").value];
