@@ -1,20 +1,17 @@
-# RiftCity Safe Minigame Lab — Audited Build 2
+# RiftCity Safe Minigame Lab — Complete 7 Mode Build
 
-This build is intentionally a **single-file GitHub Pages prototype**.
+This standalone GitHub Pages prototype contains seven playable safe minigames:
 
-## Upload
-Upload `index.html` to the root of the repository. `README.md` is optional.
-
-Then go to GitHub **Settings → Pages → Deploy from a branch → main → /(root)**.
-
-## Why single-file?
-The previous build used separate `app.js` and `style.css` files. That is valid, but replacing a Pages prototype can sometimes leave old browser/CDN-cached assets while the new HTML is already live. This build embeds all CSS and JavaScript directly in `index.html`, eliminating that mismatch.
-
-Modes included:
-1. Manual Dial
-2. Tumblers
-3. Sound Wave
-4. Rotating Rings
-5. Electronic Route
+1. Manual Combination Dial
+2. Tumbler Alignment
+3. Sound-Wave Scanner
+4. Rotating Ring Alignment
+5. Electronic Node Route
 6. Listen & Stop
-7. Deduction
+7. Combination Deduction
+
+## GitHub Pages
+Upload `index.html` to the root of a repository.
+Then go to Settings → Pages → Deploy from a branch → main → /(root).
+
+Everything is embedded in one index.html so there are no external JS/CSS files to cache incorrectly.

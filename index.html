@@ -3,155 +3,262 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090b10">
-<title>RiftCity Safe Minigame Lab</title>
+<title>RiftCity Safe Minigame Lab - 7 Modes</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#090b10;color:#f3f5f7;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,select,input{font:inherit}.app{max-width:1120px;margin:auto;padding:14px}.hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:10px 2px 14px}.eyebrow{font-size:10px;font-weight:900;letter-spacing:.15em;color:#84909d}.hero h1{margin:5px 0 6px;font-size:clamp(24px,5vw,38px)}.hero p{margin:0;color:#9fa9b5;max-width:680px}.secondary,.action,.choice-btn,.node,.pad-btn{border:1px solid #37414e;background:#171d25;color:#f5f7fa;border-radius:11px;font-weight:800;min-height:44px;padding:9px 13px}.secondary:active,.action:active,.choice-btn:active,.pad-btn:active{transform:translateY(1px)}.mode-tabs{display:flex;gap:7px;overflow-x:auto;padding:3px 0 10px;scrollbar-width:thin}.mode-tab{white-space:nowrap;border:1px solid #2d3540;background:#10151c;color:#aeb7c2;border-radius:999px;padding:9px 12px;font-weight:800;font-size:12px}.mode-tab.active{background:#edf0f3;color:#0b0e12;border-color:#fff}.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.hud>div{background:#10151c;border:1px solid #29313b;border-radius:12px;padding:9px 11px;min-width:0}.hud span{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7f8a98}.hud b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:12px}.game-card,.settings-card{background:#10151c;border:1px solid #29313b;border-radius:17px}.game-card{min-height:590px;padding:14px;display:flex;flex-direction:column}.settings-card{padding:14px}.settings-card h2{margin:4px 0 12px}.field{display:block;font-size:12px;color:#c4ccd5;margin:12px 0}.field select{display:block;width:100%;margin-top:6px;border:1px solid #38414d;background:#0b0f14;color:#fff;border-radius:10px;padding:9px}.check{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin:14px 0}.debug{padding:9px;border-radius:9px;border:1px dashed #44505e;background:#090c11;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}.hidden{display:none}.notes{border-top:1px solid #29313b;margin-top:14px;padding-top:12px;color:#929daa;font-size:12px;line-height:1.45}.notes p{margin:5px 0}.result{min-height:42px;text-align:center;padding-top:9px;font-weight:900}.result.good{color:#b9efc8}.result.bad{color:#ffb7b7}.result.info{color:#c9d5e4}.game-title{text-align:center;margin:3px 0 4px;font-size:21px}.game-sub{text-align:center;color:#9ca6b2;font-size:12px;max-width:620px;margin:0 auto 14px}.mini-hud{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:8px 0 14px}.mini-pill{border:1px solid #303947;background:#0b0f14;border-radius:999px;padding:5px 9px;font-size:11px;color:#b6c0cb}.action-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}.action.primary{background:#e8ebee;color:#090c10;border-color:#fff}.meter{height:10px;background:#080b0f;border:1px solid #2c3440;border-radius:999px;overflow:hidden}.meter>div{height:100%;background:linear-gradient(90deg,#596573,#d7dce2);transition:width .08s linear}
-/* Dial */
-.dial-shell{position:relative;width:min(72vw,365px);aspect-ratio:1;margin:12px auto}.pulse{position:absolute;inset:1%;border:2px solid rgba(255,255,255,.08);border-radius:50%;pointer-events:none}.dial{position:absolute;inset:8%;border-radius:50%;border:11px solid #252d38;background:radial-gradient(circle at 35% 30%,#303946 0,#181e27 40%,#0d1117 76%);box-shadow:inset 0 0 0 2px #4b5563,inset 0 0 28px #000,0 18px 38px rgba(0,0,0,.35);touch-action:none;color:white}.dial-center{position:absolute;inset:29%;border-radius:50%;background:#0c1015;border:2px solid #394250;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}.dial-num{font-size:clamp(38px,9vw,64px);font-weight:950}.dial-dir{font-size:10px;font-weight:900;letter-spacing:.1em;color:#9ea8b5}.pointer{position:absolute;top:-19px;left:50%;transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:22px solid #e5e7eb}.signal-row{display:grid;grid-template-columns:55px 1fr 65px;gap:8px;align-items:center;max-width:560px;margin:0 auto;font-size:11px}
-/* Tumblers */
-.tumbler-board{display:flex;justify-content:center;gap:10px;align-items:flex-end;height:280px;padding:20px 8px;background:#0b0f14;border:1px solid #2b3440;border-radius:15px;max-width:620px;margin:auto}.tumbler-col{width:52px;height:220px;position:relative;background:#151b23;border:1px solid #313b47;border-radius:9px;overflow:hidden}.sweet-band{position:absolute;left:0;right:0;top:46%;height:10%;background:rgba(255,255,255,.12);border-top:1px dashed #6f7b88;border-bottom:1px dashed #6f7b88}.pin{position:absolute;left:8px;right:8px;height:20px;border-radius:6px;background:#cbd1d8;box-shadow:0 2px 5px #000;transition:bottom .13s ease}.pin.ok{background:#a8e2bb}.tumbler-buttons{display:flex;justify-content:center;gap:10px;margin-top:10px}.pad-btn{min-width:52px;padding:7px}
-/* Wave */
-.wave-wrap{max-width:680px;margin:auto;background:#090d12;border:1px solid #2d3642;border-radius:15px;padding:16px}.wave-svg{width:100%;height:230px;display:block}.scanner{height:16px;border-radius:999px;background:#090c11;border:1px solid #303946;position:relative;margin-top:12px;overflow:hidden}.scanner-pos{position:absolute;top:0;bottom:0;width:4px;background:#e7ebef;transform:translateX(-50%)}.scan-readout{text-align:center;margin-top:9px;font-size:13px;color:#a9b4c0}
-/* Rings */
-.rings{position:relative;width:min(76vw,360px);aspect-ratio:1;margin:10px auto}.ring{position:absolute;border-radius:50%;border:18px solid #252e39;box-shadow:inset 0 0 0 2px #4b5664;transition:transform .16s ease}.ring::after{content:"";position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:20px;height:18px;background:#d7dce2;border-radius:3px 3px 0 0}.ring.one{inset:2%}.ring.two{inset:19%;border-width:16px}.ring.three{inset:37%;border-width:14px}.ring-center{position:absolute;inset:45%;border-radius:50%;background:#080b0f;border:2px solid #3d4855}.ring-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:520px;margin:auto}.ring-controls div{text-align:center}.ring-controls b{display:block;font-size:11px;margin-bottom:5px;color:#9da8b4}.ring-controls button{width:100%;margin:3px 0}
-/* Nodes */
-.node-board{position:relative;max-width:680px;height:340px;margin:auto;border:1px solid #2f3945;background:linear-gradient(#0a0e13,#10161e);border-radius:16px;overflow:hidden}.node-line{position:absolute;height:2px;background:#394452;transform-origin:left center;pointer-events:none}.node-line.active{background:#ced5dc;height:3px}.node{position:absolute;width:54px;height:54px;border-radius:50%;padding:0;transform:translate(-50%,-50%);z-index:2}.node.start{border-color:#a6dfb8}.node.goal{border-color:#f0d79a}.node.alarm{border-color:#e78b8b;color:#ffc4c4}.node.selected{background:#e7ebef;color:#090c10}.node.connected{box-shadow:0 0 0 3px rgba(255,255,255,.12)}
-/* Listen-stop */
-.listen-stage{max-width:620px;margin:20px auto}.listen-track{height:72px;border:1px solid #303946;background:#080c11;border-radius:13px;position:relative;overflow:hidden}.listen-zone{position:absolute;top:0;bottom:0;background:rgba(255,255,255,.08);border-left:1px dashed #6d7885;border-right:1px dashed #6d7885}.listen-marker{position:absolute;top:6px;bottom:6px;width:5px;background:#edf0f3;border-radius:4px;transform:translateX(-50%)}.rhythm{display:flex;justify-content:center;gap:5px;height:35px;align-items:end;margin-top:13px}.beat{width:9px;background:#647181;border-radius:3px 3px 0 0}.beat.hot{background:#d8dde3}
-/* Deduction */
-.deduce{max-width:560px;margin:auto}.guess-row{display:grid;grid-template-columns:70px 1fr;gap:9px;margin:8px 0;align-items:center}.guess-row input{width:100%;border:1px solid #35404c;background:#0a0e13;color:#fff;border-radius:10px;padding:10px;font-size:20px;text-align:center}.history{margin-top:14px;border:1px solid #2d3743;border-radius:12px;overflow:hidden}.history-line{display:grid;grid-template-columns:70px 1fr;gap:8px;padding:8px 10px;border-top:1px solid #252e38;font-size:12px}.history-line:first-child{border-top:0}.history-line b{text-align:center}.clue{color:#aab5c1}
-@media(max-width:800px){.app{padding:9px}.hero{flex-direction:column}.hero .secondary{width:100%}.workspace{grid-template-columns:1fr}.game-card{min-height:0;padding:10px}.settings-card{order:2}.hud{grid-template-columns:1fr 1fr}.hud>div:last-child{grid-column:1/-1}.dial-shell{width:min(84vw,340px)}.tumbler-board{gap:6px;height:250px}.tumbler-col{width:43px;height:200px}.node-board{height:300px}.ring-controls{grid-template-columns:1fr 1fr 1fr}.mode-tabs{margin-left:-2px;margin-right:-2px}}
+*{box-sizing:border-box}
+:root{color-scheme:dark}
+body{margin:0;background:#080a0f;color:#f4f6f8;font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:12px}
+.wrap{max-width:1050px;margin:auto}
+.card{background:#11161e;border:1px solid #2a323e;border-radius:16px;padding:14px}
+h1,h2,h3,p{margin-top:0}
+.eyebrow{font-size:11px;letter-spacing:.14em;color:#8d97a5;font-weight:800}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.top p{color:#a7b0bd;margin-bottom:0}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+select,button,input{font:inherit}
+select,button{background:#171d26;color:#fff;border:1px solid #37404c;border-radius:10px;min-height:42px;padding:8px 12px}
+button{font-weight:800}
+button.primary{background:#e9ebee;color:#0a0d11}
+.stage{background:#0b0f15;border:1px solid #2a323d;border-radius:14px;padding:14px;min-height:520px}
+.mode-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.small{font-size:12px;color:#9da7b4}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.big-center{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px}
+.result{min-height:32px;margin-top:12px;font-weight:800;text-align:center}
+.good{color:#b6f2c7}.bad{color:#ffb6b6}
+.hidden{display:none!important}
+.meter{height:12px;border-radius:999px;background:#090c11;border:1px solid #2b333e;overflow:hidden}
+.meter>div{height:100%;background:#c8cdd4;width:0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stack{display:grid;gap:10px}
 
+/* dial */
+.dialWrap{position:relative;width:min(78vw,340px);aspect-ratio:1}
+.dial{position:absolute;inset:8%;border-radius:50%;border:12px solid #27303b;background:radial-gradient(circle at 35% 30%,#303a47,#11161d 70%);touch-action:none;color:#fff}
+.dial .center{position:absolute;inset:30%;border-radius:50%;background:#0b0f14;border:2px solid #3a4553;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.dialNum{font-size:52px;font-weight:900}
+.pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:22px solid #e5e7eb}
+
+/* tumblers */
+.tumblers{display:flex;gap:10px;align-items:flex-end;justify-content:center;min-height:300px}
+.pin{width:54px;background:#0c1016;border:1px solid #303947;border-radius:12px;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.pinBar{width:28px;background:#aeb6c2;border-radius:6px 6px 2px 2px}
+.zone{height:18px;border:1px dashed #7f8a99;border-radius:5px;margin-top:7px;width:100%}
+
+/* waveform */
+.wave{display:flex;align-items:center;gap:4px;height:180px;padding:10px;background:#0b0f14;border-radius:12px;border:1px solid #29313d}
+.wave i{display:block;flex:1;background:#9ba5b2;border-radius:999px;min-width:3px}
+.scanner{width:100%;max-width:600px}
+
+/* rings */
+.rings{position:relative;width:min(74vw,330px);aspect-ratio:1}
+.ring{position:absolute;border:16px solid #596574;border-radius:50%;inset:0}
+.ring.r2{inset:16%;border-color:#788493}
+.ring.r3{inset:32%;border-color:#9da6b2}
+.notch{position:absolute;top:-18px;left:50%;width:16px;height:28px;background:#0b0f14;transform:translateX(-50%)}
+
+/* route */
+.nodes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:520px;margin:auto}
+.node{min-height:64px;border-radius:12px;border:1px solid #34404d;background:#151b24}
+.node.on{background:#dfe3e8;color:#090c10}
+.node.badnode{border-color:#754646}
+
+/* listen */
+.stopTrack{height:26px;border-radius:999px;background:#0b0f14;border:1px solid #2b3440;position:relative;overflow:hidden;max-width:650px;width:100%}
+.stopTarget{position:absolute;top:0;bottom:0;background:#4c5561}
+.stopNeedle{position:absolute;top:-4px;bottom:-4px;width:4px;background:#f4f5f6}
+
+/* deduction */
+.guessgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:420px}
+.guessgrid input{min-height:46px;border-radius:10px;border:1px solid #37414e;background:#0b0f14;color:#fff;padding:8px;text-align:center;font-size:20px}
+.history{display:grid;gap:6px;max-width:520px;margin-top:12px}
+.history div{background:#0b0f14;border:1px solid #29313c;border-radius:9px;padding:8px}
+
+/* sound/listen */
+.pulseBox{font-size:54px;font-weight:900;letter-spacing:.08em}
+
+@media(max-width:700px){
+ .top{flex-direction:column}
+ .grid2{grid-template-columns:1fr}
+ .stage{min-height:auto}
+ .big-center{min-height:390px}
+ .mode-title{align-items:flex-start;flex-direction:column}
+}
 </style>
 </head>
 <body>
-<main class="app">
-  <header class="hero">
-    <div>
-      <div class="eyebrow">RIFTCITY • SAFECRACKING LAB • AUDITED BUILD 2</div>
-      <h1>Safe Minigame Tester</h1>
-      <p>Switch between prototypes and find which one actually feels good before it goes into the game.</p>
-    </div>
-    <button id="resetBtn" class="secondary">New / Reset Safe</button>
-  </header>
-
-  <nav id="modeTabs" class="mode-tabs" aria-label="Safe minigames"></nav>
-
-  <section class="hud">
-    <div><span>Mode</span><b id="hudMode">—</b></div>
-    <div><span>Difficulty</span><b id="hudDifficulty">Normal</b></div>
-    <div><span>Status</span><b id="hudStatus">Ready</b></div>
-  </section>
-
-  <section class="workspace">
-    <div class="game-card">
-      <div id="gameMount"></div>
-      <div id="result" class="result" aria-live="polite"></div>
-    </div>
-
-    <aside class="settings-card">
-      <div class="eyebrow">TEST SETTINGS</div>
-      <h2>Fine Tune</h2>
-      <label class="field">Difficulty
-        <select id="difficulty">
-          <option value="easy">Easy</option>
-          <option value="normal" selected>Normal</option>
-          <option value="hard">Hard</option>
-          <option value="expert">Expert</option>
-        </select>
-      </label>
-      <label class="check"><span>Show debug answer</span><input id="debugToggle" type="checkbox"></label>
-      <div id="debug" class="debug hidden"></div>
-      <div class="notes">
-        <b>Testing tip</b>
-        <p>Try every mode on both desktop and phone. Difficulty changes are deliberately obvious so we can decide later how mastery/tools should affect each mechanic.</p>
+<div class="wrap">
+  <section class="card">
+    <div class="top">
+      <div>
+        <div class="eyebrow">RIFTCITY SAFE MINIGAME LAB</div>
+        <h1>7 Playable Safe Prototypes</h1>
+        <p>Switch between every concept here before we choose what goes into the real crime system.</p>
       </div>
-    </aside>
+      <div class="small"><b>COMPLETE 7-MODE BUILD</b></div>
+    </div>
+
+    <div class="controls">
+      <select id="modeSelect">
+        <option value="dial">1. Manual Combination Dial</option>
+        <option value="tumblers">2. Tumbler Alignment</option>
+        <option value="wave">3. Sound-Wave Scanner</option>
+        <option value="rings">4. Rotating Ring Alignment</option>
+        <option value="route">5. Electronic Node Route</option>
+        <option value="listen">6. Listen & Stop</option>
+        <option value="deduce">7. Combination Deduction</option>
+      </select>
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button id="resetBtn" type="button">Reset Current</button>
+      <button id="debugBtn" type="button">Toggle Debug</button>
+    </div>
+
+    <section id="gameStage" class="stage"></section>
   </section>
-</main>
+</div>
+
 <script>
-(() => {
+(()=>{
 const $=id=>document.getElementById(id);
-const mount=$("gameMount"), result=$("result"), debug=$("debug");
-let difficulty="normal", active=null, cleanup=()=>{};
-const diff={easy:{w:9,mistakes:4,speed:.65},normal:{w:5,mistakes:3,speed:1},hard:{w:3,mistakes:2,speed:1.28},expert:{w:2,mistakes:2,speed:1.55}};
-const modes=[
-  ["dial","Manual Dial"],["tumblers","Tumblers"],["wave","Sound Wave"],["rings","Rotating Rings"],["nodes","Electronic Route"],["listen","Listen & Stop"],["deduction","Deduction"]
-];
-function setResult(msg,type="info"){result.textContent=msg;result.className="result "+type;$("hudStatus").textContent=msg||"Ready"}
-function wrap(n,max=100){return((n%max)+max)%max} function d100(a,b){let d=Math.abs(a-b);return Math.min(d,100-d)}
-function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
-function title(name,sub){return `<h2 class="game-title">${name}</h2><p class="game-sub">${sub}</p>`}
-function debugText(t){debug.textContent=t}
-function setupTabs(){const host=$("modeTabs");modes.forEach(([id,name])=>{const b=document.createElement("button");b.className="mode-tab";b.textContent=name;b.dataset.mode=id;b.addEventListener("click",()=>load(id));host.appendChild(b)})}
-function load(id){cleanup();cleanup=()=>{};active=id;document.querySelectorAll(".mode-tab").forEach(b=>b.classList.toggle("active",b.dataset.mode===id));$("hudMode").textContent=modes.find(x=>x[0]===id)[1];setResult("Ready","info");({dial:gameDial,tumblers:gameTumblers,wave:gameWave,rings:gameRings,nodes:gameNodes,listen:gameListen,deduction:gameDeduction}[id])()}
+let debug=false;
+let cleanup=()=>{};
+const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const wrap100=n=>((n%100)+100)%100;
+const diff=()=>$("difficulty").value;
 
-function gameDial(){
- let combo=[ri(0,99),ri(0,99),ri(0,99)],stage=0,mistakes=0,current=ri(0,99),dir=null,drag=false,lastA=0;const dirs=["left","right","left"],D=diff[difficulty];
- mount.innerHTML=title("Manual Combination Dial","Feel for stronger feedback and lock three numbers in Left → Right → Left order.")+`<div class="mini-hud"><span class="mini-pill" id="dStage"></span><span class="mini-pill" id="dMiss"></span></div><div class="dial-shell"><div id="dPulse" class="pulse"></div><button id="dialObj" class="dial" type="button"><div class="pointer"></div><div class="dial-center"><div id="dNum" class="dial-num"></div><div id="dDir" class="dial-dir"></div></div></button></div><div class="signal-row"><span>Signal</span><div class="meter"><div id="dSig"></div></div><b id="dSigTxt"></b></div><div class="action-row"><button id="dLeft" class="action">◀ Left</button><button id="dSet" class="action primary">Set Number</button><button id="dRight" class="action">Right ▶</button></div>`;
- const upd=()=>{if(stage>=3)return;$("dStage").textContent=`Stage ${stage+1}/3`;$("dMiss").textContent=`Mistakes ${mistakes}/${D.mistakes}`;$("dNum").textContent=String(current).padStart(2,"0");$("dDir").textContent=`TURN ${dirs[stage].toUpperCase()}`;const dist=d100(current,combo[stage]);const s=Math.max(0,Math.min(1,1-dist/23));$("dSig").style.width=(s*100)+"%";$("dSigTxt").textContent=s>.8?"Strong":s>.5?"Warm":s>.25?"Faint":"Cold";$("dPulse").style.boxShadow=`0 0 ${Math.round(s*32)}px rgba(255,255,255,${s*.25})`;debugText(`Answer: ${combo[0]} ←  ${combo[1]} →  ${combo[2]} ←`)};
- const move=x=>{if(stage>=3||mistakes>=D.mistakes)return;dir=x;current=wrap(current+(x==="right"?1:-1));upd()};
- $("dLeft").onclick=()=>move("left");$("dRight").onclick=()=>move("right");$("dSet").onclick=()=>{if(dir!==dirs[stage]){mistakes++;setResult("Wrong turn direction.","bad")}else if(d100(current,combo[stage])<=D.w){stage++;dir=null;if(stage===3){setResult("Safe opened.","good");$("dDir").textContent="OPEN"}else setResult("Click found. Reverse direction.","good")}else{mistakes++;setResult("No click at that number.","bad")}if(mistakes>=D.mistakes)setResult("Locked out.","bad");upd()};
- const dial=$("dialObj");function ang(e){let r=dial.getBoundingClientRect();return Math.atan2(e.clientY-r.top-r.height/2,e.clientX-r.left-r.width/2)*180/Math.PI}dial.onpointerdown=e=>{drag=true;lastA=ang(e);dial.setPointerCapture(e.pointerId)};dial.onpointermove=e=>{if(!drag)return;let a=ang(e),delta=a-lastA;if(delta>180)delta-=360;if(delta<-180)delta+=360;if(Math.abs(delta)>3){move(delta>0?"right":"left");lastA=a}};dial.onpointerup=()=>drag=false;dial.onpointercancel=()=>drag=false;upd();
+function setStage(html){ cleanup(); cleanup=()=>{}; $("gameStage").innerHTML=html; }
+function msg(text,good=true){ const el=$("result"); if(el){el.textContent=text;el.className="result "+(good?"good":"bad");} }
+
+function renderDial(){
+ setStage(`
+ <div class="mode-title"><div><h2>Manual Combination Dial</h2><div class="small">Find three hidden numbers in Left → Right → Left order.</div></div><div class="small">Classic mechanical safe</div></div>
+ <div class="big-center">
+  <div class="dialWrap"><button id="dial" class="dial" type="button"><div class="pointer"></div><div class="center"><div id="dialNum" class="dialNum">00</div><div id="dialDir" class="small">TURN LEFT</div></div></button></div>
+  <div style="width:min(100%,560px);margin-top:12px"><div class="meter"><div id="dialSignal"></div></div></div>
+  <div class="row" style="margin-top:12px"><button id="dLeft">◀ Left</button><button id="dSet" class="primary">Set Number</button><button id="dRight">Right ▶</button></div>
+  <div id="debugText" class="small"></div><div id="result" class="result"></div>
+ </div>`);
+ const widths={easy:8,normal:5,hard:3}; const w=widths[diff()];
+ let combo=[rand(0,99),rand(0,99),rand(0,99)], stage=0, cur=rand(0,99), last=null, drag=false, lastA=0;
+ const dirs=["left","right","left"];
+ const dist=(a,b)=>Math.min(Math.abs(a-b),100-Math.abs(a-b));
+ function update(){
+   $("dialNum").textContent=String(cur).padStart(2,"0");
+   $("dialDir").textContent=stage>=3?"OPEN":"TURN "+dirs[stage].toUpperCase();
+   const d=stage>=3?0:dist(cur,combo[stage]); $("dialSignal").style.width=(stage>=3?100:clamp((1-d/24)*100,0,100))+"%";
+   $("debugText").textContent=debug?`DEBUG: ${combo.join(" / ")} | Stage ${stage+1}`:"";
+ }
+ function move(dir,amt=1){ if(stage>=3)return; last=dir; cur=wrap100(cur+(dir==="right"?amt:-amt)); update(); }
+ $("dLeft").onclick=()=>move("left"); $("dRight").onclick=()=>move("right");
+ $("dSet").onclick=()=>{ if(last!==dirs[stage]) return msg("Wrong direction.",false); if(dist(cur,combo[stage])<=w){stage++; msg(stage===3?"Safe opened!":"Click found.",true); update()}else msg("No click.",false); };
+ const dial=$("dial");
+ const ang=e=>{const r=dial.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI};
+ dial.onpointerdown=e=>{drag=true;lastA=ang(e);dial.setPointerCapture(e.pointerId)};
+ dial.onpointermove=e=>{if(!drag)return;let a=ang(e),d=a-lastA;if(d>180)d-=360;if(d<-180)d+=360;if(Math.abs(d)>3){move(d>0?"right":"left",Math.max(1,Math.round(Math.abs(d)/5)));lastA=a}};
+ dial.onpointerup=()=>drag=false; dial.onpointercancel=()=>drag=false;
+ update();
 }
 
-function gameTumblers(){
- const n=difficulty==="easy"?4:difficulty==="normal"?5:6,D=diff[difficulty],target=50,band=difficulty==="easy"?11:difficulty==="normal"?8:difficulty==="hard"?6:4;let vals=Array.from({length:n},()=>ri(10,90)),moves=0;
- mount.innerHTML=title("Tumbler Alignment","Raise each pin into the shear line. Each control also nudges a neighbor, so plan the order.")+`<div class="mini-hud"><span class="mini-pill" id="tMoves"></span><span class="mini-pill">Pins ${n}</span></div><div class="tumbler-board" id="tBoard"></div><div class="tumbler-buttons" id="tBtns"></div>`;
- const board=$("tBoard"),btns=$("tBtns");for(let i=0;i<n;i++){board.insertAdjacentHTML("beforeend",`<div class="tumbler-col"><div class="sweet-band"></div><div class="pin" id="pin${i}"></div></div>`);const b=document.createElement("button");b.className="pad-btn";b.textContent=i+1;b.onclick=()=>tap(i);btns.appendChild(b)}
- function ok(v){return Math.abs(v-target)<=band}function tap(i){moves++;vals[i]=Math.min(96,vals[i]+(difficulty==="expert"?9:12));if(vals[i]>92)vals[i]=12;if((difficulty==="hard"||difficulty==="expert")&&i+1<n)vals[i+1]=wrap(vals[i+1]+5,100);if(difficulty==="expert"&&i>0)vals[i-1]=wrap(vals[i-1]+2,100);render();if(vals.every(ok))setResult(`All tumblers aligned in ${moves} moves. Safe opened.`,"good")}
- function render(){vals.forEach((v,i)=>{const p=$(`pin${i}`);p.style.bottom=`${v}%`;p.classList.toggle("ok",ok(v))});$("tMoves").textContent=`Moves ${moves}`;debugText(`Target band: ${target-band}–${target+band}\nPins: ${vals.join(", ")}`)}render();
+function renderTumblers(){
+ const count=diff()==="easy"?4:diff()==="normal"?5:6;
+ setStage(`<div class="mode-title"><div><h2>Tumbler Alignment</h2><div class="small">Raise/lower every pin until its top lands inside the target band.</div></div></div>
+ <div class="big-center"><div id="tumblers" class="tumblers"></div><div class="row" style="margin-top:14px"><button id="check" class="primary">Try Lock</button></div><div id="debugText" class="small"></div><div id="result" class="result"></div></div>`);
+ let vals=Array.from({length:count},()=>rand(15,85));
+ let targets=Array.from({length:count},()=>rand(38,68));
+ const tol=diff()==="easy"?9:diff()==="normal"?6:4;
+ function draw(){
+   $("tumblers").innerHTML=vals.map((v,i)=>`<div class="pin"><button data-i="${i}" data-d="1">▲</button><div class="pinBar" style="height:${90+v*2}px"></div><div class="zone"></div><button data-i="${i}" data-d="-1">▼</button></div>`).join("");
+   $("tumblers").querySelectorAll("button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,d=+b.dataset.d;vals[i]=clamp(vals[i]+d*(diff()==="hard"?3:5),0,100);draw()});
+   $("debugText").textContent=debug?`DEBUG targets: ${targets.join(", ")} | Current: ${vals.join(", ")}`:"";
+ }
+ $("check").onclick=()=>{const ok=vals.every((v,i)=>Math.abs(v-targets[i])<=tol);msg(ok?"Tumblers aligned — safe opened!":"Pins aren't aligned yet.",ok)};
+ draw();
 }
 
-function gameWave(){
- const D=diff[difficulty],targets=[ri(8,91),ri(8,91),ri(8,91)],dirs=[1,-1,1];let stage=0,pos=0,mistakes=0,raf,last=performance.now();const speed=(difficulty==="easy"?8:difficulty==="normal"?13:difficulty==="hard"?18:23);
- mount.innerHTML=title("Sound-Wave Scanner","Sweep the lock and watch the waveform. Stop where the mechanical resonance becomes strongest.")+`<div class="mini-hud"><span class="mini-pill" id="wStage"></span><span class="mini-pill" id="wMiss"></span></div><div class="wave-wrap"><svg class="wave-svg" viewBox="0 0 600 220" preserveAspectRatio="none"><polyline id="waveLine" fill="none" stroke="#cfd6dd" stroke-width="3" points=""/></svg><div class="scanner"><div id="scanPos" class="scanner-pos"></div></div><div id="scanTxt" class="scan-readout"></div></div><div class="action-row"><button id="waveLock" class="action primary">Lock Resonance</button></div>`;
- function draw(){let pts=[];const dist=d100(pos,targets[stage]??0),hot=Math.max(0,1-dist/24);for(let x=0;x<=600;x+=8){const y=110+Math.sin(x*.08+pos*.1)*18+Math.sin(x*.22)*8*hot+Math.sin(x*.47)*20*hot;pts.push(`${x},${y}`)}$("waveLine").setAttribute("points",pts.join(" "));$("scanPos").style.left=pos+"%";$("scanTxt").textContent=hot>.82?"Distinct double resonance":hot>.5?"Stronger vibration":hot>.22?"Faint mechanical noise":"Flat response";$("wStage").textContent=`Stage ${Math.min(stage+1,3)}/3`;$("wMiss").textContent=`Mistakes ${mistakes}/${D.mistakes}`;debugText(`Resonances: ${targets.join(", ")} | current ${pos.toFixed(1)}`)}
- function loop(t){const dt=(t-last)/1000;last=t;if(stage<3&&mistakes<D.mistakes){pos+=dirs[stage]*speed*dt;if(pos>=100){pos=100;dirs[stage]=-1}else if(pos<=0){pos=0;dirs[stage]=1}draw()}raf=requestAnimationFrame(loop)}
- $("waveLock").onclick=()=>{if(d100(pos,targets[stage])<=D.w+2){stage++;setResult(stage===3?"All resonances matched. Safe opened.":"Resonance locked.","good")}else{mistakes++;setResult("Wrong resonance.","bad")}if(mistakes>=D.mistakes)setResult("Alarmed / locked out.","bad");draw()};raf=requestAnimationFrame(loop);cleanup=()=>cancelAnimationFrame(raf);draw();
+function renderWave(){
+ setStage(`<div class="mode-title"><div><h2>Sound-Wave Scanner</h2><div class="small">Scan positions and find the three strongest mechanical signatures.</div></div></div>
+ <div class="big-center scanner">
+   <div id="wave" class="wave"></div>
+   <div class="row" style="width:100%;margin-top:14px"><button id="scanLeft">◀ Scan</button><div style="flex:1"><div class="meter"><div id="waveMeter"></div></div></div><button id="scanRight">Scan ▶</button></div>
+   <div class="row" style="margin-top:12px"><button id="waveLock" class="primary">Lock Signature</button></div>
+   <div id="wavePos" class="small"></div><div id="debugText" class="small"></div><div id="result" class="result"></div>
+ </div>`);
+ let secrets=[rand(8,28),rand(36,63),rand(70,92)], found=[], pos=0;
+ const tol=diff()==="easy"?5:diff()==="normal"?3:2;
+ function nearest(){return Math.min(...secrets.filter(s=>!found.includes(s)).map(s=>Math.abs(s-pos)))}
+ function draw(){
+   const d=found.length===3?0:nearest(); const strength=found.length===3?100:clamp((1-d/18)*100,0,100);
+   $("waveMeter").style.width=strength+"%"; $("wavePos").textContent=`Scanner position: ${pos}`;
+   $("wave").innerHTML=Array.from({length:34},(_,i)=>`<i style="height:${15+Math.abs(Math.sin((i+pos)/4))*120*(strength/100)+rand(0,16)}px"></i>`).join("");
+   $("debugText").textContent=debug?`DEBUG signatures: ${secrets.join(", ")} | Found ${found.length}/3`:"";
+ }
+ const move=n=>{pos=clamp(pos+n,0,99);draw()};
+ $("scanLeft").onclick=()=>move(-2);$("scanRight").onclick=()=>move(2);
+ $("waveLock").onclick=()=>{const target=secrets.filter(s=>!found.includes(s)).sort((a,b)=>Math.abs(a-pos)-Math.abs(b-pos))[0];if(Math.abs(target-pos)<=tol){found.push(target);msg(found.length===3?"All signatures found — opened!":"Signature locked.",true)}else msg("Wrong mechanical signature.",false);draw()};
+ draw();
 }
 
-function gameRings(){
- const step=difficulty==="easy"?15:difficulty==="normal"?12:difficulty==="hard"?9:7;let a=[ri(0,35)*10,ri(0,35)*10,ri(0,35)*10],moves=0;const tol=difficulty==="easy"?16:difficulty==="normal"?11:difficulty==="hard"?7:5;
- mount.innerHTML=title("Rotating Ring Lock","Align all three notches at twelve o'clock. Moving one ring subtly shifts another.")+`<div class="mini-hud"><span class="mini-pill" id="rMoves"></span></div><div class="rings"><div id="ring0" class="ring one"></div><div id="ring1" class="ring two"></div><div id="ring2" class="ring three"></div><div class="ring-center"></div></div><div class="ring-controls" id="ringControls"></div>`;
- const rc=$("ringControls");for(let i=0;i<3;i++){const d=document.createElement("div");d.innerHTML=`<b>Ring ${i+1}</b><button class="action" data-i="${i}" data-d="-1">◀</button><button class="action" data-i="${i}" data-d="1">▶</button>`;rc.appendChild(d)}rc.querySelectorAll("button").forEach(b=>b.onclick=()=>turn(+b.dataset.i,+b.dataset.d));
- function delta0(x){x=wrap(x,360);return Math.min(x,360-x)}function turn(i,d){moves++;a[i]=wrap(a[i]+d*step,360);const neighbor=(i+1)%3;a[neighbor]=wrap(a[neighbor]-d*((difficulty==="hard"||difficulty==="expert")?step/3:0),360);render();if(a.every(x=>delta0(x)<=tol))setResult(`All notches aligned in ${moves} moves. Safe opened.`,"good")}
- function render(){a.forEach((x,i)=>$(`ring${i}`).style.transform=`rotate(${x}deg)`);$("rMoves").textContent=`Moves ${moves}`;debugText(`Angles: ${a.map(x=>x.toFixed(1)).join("°, ")}° | target 0° ±${tol}`)}render();
+function renderRings(){
+ setStage(`<div class="mode-title"><div><h2>Rotating Ring Alignment</h2><div class="small">Align all three hidden notches at the top.</div></div></div>
+ <div class="big-center"><div class="rings"><div id="r1" class="ring"><div class="notch"></div></div><div id="r2" class="ring r2"><div class="notch"></div></div><div id="r3" class="ring r3"><div class="notch"></div></div></div>
+ <div class="row"><button data-r="0">Outer +</button><button data-r="1">Middle +</button><button data-r="2">Inner +</button><button id="ringCheck" class="primary">Try Lock</button></div><div id="debugText" class="small"></div><div id="result" class="result"></div></div>`);
+ let ang=[rand(0,11)*30,rand(0,11)*30,rand(0,11)*30], targets=[0,0,0];
+ const coupled=diff()==="hard";
+ function draw(){["r1","r2","r3"].forEach((id,i)=>$(id).style.transform=`rotate(${ang[i]}deg)`);$("debugText").textContent=debug?`DEBUG angles: ${ang.join(", ")}`:"";}
+ document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const i=+b.dataset.r;ang[i]=(ang[i]+30)%360;if(coupled&&i<2)ang[i+1]=(ang[i+1]+30)%360;draw()});
+ $("ringCheck").onclick=()=>{const ok=ang.every(a=>a%360===0);msg(ok?"All rings aligned — opened!":"Notches are not aligned.",ok)};
+ draw();
 }
 
-function gameNodes(){
- const hard=difficulty==="hard"||difficulty==="expert";const positions=[ [10,50],[26,22],[27,76],[47,35],[48,69],[68,20],[69,54],[71,84],[90,50] ];const alarmIds=hard?[4,6]:difficulty==="normal"?[6]:[];const edges=[[0,1],[0,2],[1,3],[2,3],[2,4],[3,5],[3,6],[4,6],[4,7],[5,8],[6,8],[7,8],[1,4],[5,6]];let selected=0,path=[0];
- mount.innerHTML=title("Electronic Safe Routing","Route power from START to VAULT without touching alarm nodes. Backtracking is allowed.")+`<div class="mini-hud"><span class="mini-pill" id="nPath"></span></div><div id="nodeBoard" class="node-board"></div><div class="action-row"><button id="nodeBack" class="action">Backtrack</button><button id="nodeClear" class="action">Reset Route</button></div>`;
- const board=$("nodeBoard");function lineGeom(a,b){const A=positions[a],B=positions[b],dx=B[0]-A[0],dy=B[1]-A[1],len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI;return `left:${A[0]}%;top:${A[1]}%;width:${len}%;transform:rotate(${ang}deg)`}
- edges.forEach(([a,b],i)=>board.insertAdjacentHTML("beforeend",`<div id="edge${i}" class="node-line" style="${lineGeom(a,b)}"></div>`));positions.forEach((p,i)=>{const b=document.createElement("button");b.className="node "+(i===0?"start":i===8?"goal":alarmIds.includes(i)?"alarm":"");b.style.left=p[0]+"%";b.style.top=p[1]+"%";b.textContent=i===0?"START":i===8?"VAULT":alarmIds.includes(i)?"ALARM":String(i);b.onclick=()=>pick(i);board.appendChild(b)});
- function adjacent(a,b){return edges.some(e=>(e[0]===a&&e[1]===b)||(e[0]===b&&e[1]===a))}function pick(i){if(i===selected)return;if(!adjacent(selected,i)){setResult("That node is not connected to your current route.","bad");return}if(alarmIds.includes(i)){setResult("Alarm node triggered. Route failed.","bad");return}path.push(i);selected=i;render();if(i===8)setResult("Power routed cleanly. Electronic safe opened.","good")}
- $("nodeBack").onclick=()=>{if(path.length>1){path.pop();selected=path[path.length-1];render()}};$("nodeClear").onclick=()=>{path=[0];selected=0;setResult("Route reset.","info");render()};
- function render(){board.querySelectorAll(".node").forEach((n,i)=>{n.classList.toggle("selected",i===selected);n.classList.toggle("connected",path.includes(i))});edges.forEach((e,i)=>{let active=false;for(let j=1;j<path.length;j++)if((e[0]===path[j-1]&&e[1]===path[j])||(e[1]===path[j-1]&&e[0]===path[j]))active=true;$(`edge${i}`).classList.toggle("active",active)});$("nPath").textContent="Route: "+path.join(" → ");debugText(`Alarm nodes: ${alarmIds.length?alarmIds.join(", "):"none"}\nValid edges: ${edges.map(e=>e.join("-" )).join(", ")}`)}render();
+function renderRoute(){
+ setStage(`<div class="mode-title"><div><h2>Electronic Node Route</h2><div class="small">Create a powered path from START to LOCK without activating alarm nodes.</div></div></div>
+ <div class="big-center"><div id="nodes" class="nodes"></div><div class="row" style="margin-top:14px"><button id="routeCheck" class="primary">Test Circuit</button></div><div id="debugText" class="small"></div><div id="result" class="result"></div></div>`);
+ const n=12, start=0, end=11;
+ let selected=new Set([start,end]);
+ const alarm=new Set(diff()==="easy"?[6]:diff()==="normal"?[5,8]:[3,6,9]);
+ const validPath=[0,1,2,6,10,11].filter(i=>!alarm.has(i));
+ function draw(){
+   $("nodes").innerHTML=Array.from({length:n},(_,i)=>`<button class="node ${selected.has(i)?"on":""} ${alarm.has(i)?"badnode":""}" data-n="${i}" ${i===start||i===end?"disabled":""}>${i===start?"START":i===end?"LOCK":"NODE "+i}</button>`).join("");
+   $("nodes").querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{const i=+b.dataset.n;if(selected.has(i))selected.delete(i);else selected.add(i);draw()});
+   $("debugText").textContent=debug?`DEBUG valid route nodes: ${validPath.join(" → ")}`:"";
+ }
+ $("routeCheck").onclick=()=>{const alarms=[...selected].some(i=>alarm.has(i));const path=validPath.every(i=>selected.has(i));msg(!alarms&&path?"Circuit accepted — electronic safe opened!":alarms?"Alarm node activated.":"Route incomplete.",!alarms&&path)};
+ draw();
 }
 
-function gameListen(){
- const D=diff[difficulty],targets=[ri(12,88),ri(12,88),ri(12,88)];let stage=0,pos=0,dir=1,mistakes=0,raf,last=performance.now();const speed=18*D.speed,zone=D.w+3;
- mount.innerHTML=title("Listen & Stop","The dial sweeps automatically. Read the changing click rhythm and stop on the hidden sweet spot.")+`<div class="mini-hud"><span class="mini-pill" id="lStage"></span><span class="mini-pill" id="lMiss"></span></div><div class="listen-stage"><div class="listen-track"><div id="lZone" class="listen-zone hidden"></div><div id="lMarker" class="listen-marker"></div></div><div id="rhythm" class="rhythm"></div><div id="lText" class="scan-readout"></div></div><div class="action-row"><button id="lStop" class="action primary">STOP / Listen Here</button></div>`;
- function render(){const distance=d100(pos,targets[stage]??0),hot=Math.max(0,1-distance/24);$("lMarker").style.left=pos+"%";$("lStage").textContent=`Stage ${Math.min(stage+1,3)}/3`;$("lMiss").textContent=`Mistakes ${mistakes}/${D.mistakes}`;const rhythm=$("rhythm");rhythm.innerHTML="";for(let i=0;i<9;i++){const b=document.createElement("div");b.className="beat"+(hot>.72&&i%2===0?" hot":"");b.style.height=(8+Math.abs(Math.sin(i*1.7+pos*.1))*13+hot*(i%2===0?18:5))+"px";rhythm.appendChild(b)}$("lText").textContent=hot>.8?"Double-click rhythm":hot>.5?"Clicks tightening":hot>.25?"Occasional click":"Quiet";debugText(`Stops: ${targets.join(", ")} | current ${pos.toFixed(1)} | zone ±${zone}`)}
- function loop(t){const dt=(t-last)/1000;last=t;if(stage<3&&mistakes<D.mistakes){pos+=dir*speed*dt;if(pos>=100){pos=100;dir=-1}else if(pos<=0){pos=0;dir=1}render()}raf=requestAnimationFrame(loop)}
- $("lStop").onclick=()=>{if(d100(pos,targets[stage])<=zone){stage++;setResult(stage===3?"All three click rhythms found. Safe opened.":"Correct click rhythm.","good")}else{mistakes++;setResult("Wrong rhythm.","bad")}if(mistakes>=D.mistakes)setResult("Lockout triggered.","bad");render()};raf=requestAnimationFrame(loop);cleanup=()=>cancelAnimationFrame(raf);render();
+function renderListen(){
+ setStage(`<div class="mode-title"><div><h2>Listen & Stop</h2><div class="small">Stop the moving needle when the lock emits its strongest click.</div></div></div>
+ <div class="big-center" style="width:100%"><div class="pulseBox" id="pulseText">...</div><div class="stopTrack"><div id="stopTarget" class="stopTarget"></div><div id="needle" class="stopNeedle"></div></div><button id="stopBtn" class="primary" style="margin-top:18px">STOP</button><div id="debugText" class="small"></div><div id="result" class="result"></div></div>`);
+ let x=0,dir=1, target=rand(18,78), width=diff()==="easy"?14:diff()==="normal"?9:6, raf;
+ $("stopTarget").style.left=target+"%";$("stopTarget").style.width=width+"%"; if(!debug)$("stopTarget").style.opacity=".08";
+ function loop(){x+=dir*(diff()==="hard"?0.65:0.42);if(x>=100||x<=0)dir*=-1;x=clamp(x,0,100);$("needle").style.left=x+"%";const center=target+width/2,d=Math.abs(x-center);$("pulseText").textContent=d<5?"CLICK CLICK":d<14?"click...":"...";raf=requestAnimationFrame(loop)}
+ $("stopBtn").onclick=()=>{const ok=x>=target&&x<=target+width;msg(ok?"Perfect click — lock opened!":"Missed the click window.",ok)};
+ $("debugText").textContent=debug?`DEBUG target: ${target.toFixed(0)}–${(target+width).toFixed(0)}%`:"";
+ loop(); cleanup=()=>cancelAnimationFrame(raf);
 }
 
-function gameDeduction(){
- const maxGuesses=difficulty==="easy"?9:difficulty==="normal"?7:difficulty==="hard"?6:5;const secret=ri(0,99);let guesses=0,history=[];
- mount.innerHTML=title("Combination Deduction","Use limited guesses and feedback to narrow down the hidden two-digit number.")+`<div class="mini-hud"><span class="mini-pill" id="gCount"></span></div><div class="deduce"><div class="guess-row"><label for="guessInput"><b>Guess</b></label><input id="guessInput" type="number" inputmode="numeric" min="0" max="99" placeholder="00"></div><div class="action-row"><button id="guessBtn" class="action primary">Test Number</button></div><div id="history" class="history"></div></div>`;
- function clue(g){const delta=g-secret,ad=Math.abs(delta);if(ad===0)return"Exact match";let closeness=ad<=3?"Extremely close":ad<=8?"Very close":ad<=18?"Close":ad<=35?"Far":"Very far";return `${closeness} • ${delta<0?"Higher":"Lower"}`}
- function go(){let g=Math.max(0,Math.min(99,parseInt($("guessInput").value,10)));if(Number.isNaN(g)){setResult("Enter a number from 0 to 99.","bad");return}guesses++;const c=clue(g);history.unshift([g,c]);render();if(g===secret)setResult(`Exact combination found in ${guesses} guesses. Safe opened.`,"good");else if(guesses>=maxGuesses)setResult("Out of guesses. Safe locked.","bad");else setResult(c,"info");$("guessInput").select()}
- $("guessBtn").onclick=go;$("guessInput").onkeydown=e=>{if(e.key==="Enter")go()};function render(){$("gCount").textContent=`Guesses ${guesses}/${maxGuesses}`;$("history").innerHTML=history.map(([g,c])=>`<div class="history-line"><b>${String(g).padStart(2,"0")}</b><span class="clue">${c}</span></div>`).join("")||`<div class="history-line"><b>—</b><span class="clue">No guesses yet</span></div>`;debugText(`Secret: ${String(secret).padStart(2,"0")}`)}render();
+function renderDeduce(){
+ setStage(`<div class="mode-title"><div><h2>Combination Deduction</h2><div class="small">Use limited guesses and feedback to determine the hidden 3-digit code.</div></div></div>
+ <div class="big-center"><div class="guessgrid"><input id="g1" inputmode="numeric" maxlength="1"><input id="g2" inputmode="numeric" maxlength="1"><input id="g3" inputmode="numeric" maxlength="1"></div><button id="guessBtn" class="primary" style="margin-top:12px">Submit Guess</button><div id="attempts" class="small"></div><div id="history" class="history"></div><div id="debugText" class="small"></div><div id="result" class="result"></div></div>`);
+ const code=[rand(0,9),rand(0,9),rand(0,9)], max=diff()==="easy"?8:diff()==="normal"?6:5;let tries=0;
+ function upd(){ $("attempts").textContent=`Attempts: ${tries} / ${max}`;$("debugText").textContent=debug?`DEBUG code: ${code.join("")}`:""; }
+ $("guessBtn").onclick=()=>{if(tries>=max)return;const vals=[$("g1").value,$("g2").value,$("g3").value].map(v=>Number(v));if(vals.some(v=>Number.isNaN(v)||v<0||v>9))return msg("Enter all three digits.",false);tries++;let exact=0,present=0;const remCode=[],remGuess=[];for(let i=0;i<3;i++){if(vals[i]===code[i])exact++;else{remCode.push(code[i]);remGuess.push(vals[i])}}for(const g of remGuess){const ix=remCode.indexOf(g);if(ix>=0){present++;remCode.splice(ix,1)}}const line=document.createElement("div");line.textContent=`${vals.join("")} — ${exact} exact, ${present} correct digit wrong place`;$("history").prepend(line);if(exact===3)msg("Code solved — safe opened!",true);else if(tries>=max)msg("Out of guesses.",false);else msg("Use the feedback and try again.",true);upd()};
+ upd();
 }
 
-
-window.addEventListener("error",e=>{const r=document.getElementById("result");if(r){r.textContent="Prototype error: "+(e.message||"unknown error");r.className="result bad";}});
-setupTabs();$("difficulty").addEventListener("change",e=>{difficulty=e.target.value;$("hudDifficulty").textContent=e.target.options[e.target.selectedIndex].text;load(active)});$("resetBtn").onclick=()=>load(active);$("debugToggle").addEventListener("change",e=>debug.classList.toggle("hidden",!e.target.checked));load("dial");
+const renderers={dial:renderDial,tumblers:renderTumblers,wave:renderWave,rings:renderRings,route:renderRoute,listen:renderListen,deduce:renderDeduce};
+function render(){renderers[$("modeSelect").value]();}
+$("modeSelect").onchange=render;
+$("difficulty").onchange=render;
+$("resetBtn").onclick=render;
+$("debugBtn").onclick=()=>{debug=!debug;render()};
+render();
 })();
-
 </script>
 </body>
 </html>
