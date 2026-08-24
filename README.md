@@ -1,16 +1,16 @@
-# RiftCity Circuit Safe — Selected Neutral Board Set
+# RiftCity Circuit Safe — Unique Safe Template Set
 
-Standalone GitHub Pages prototype using the user-selected neutral 3 / 4 / 6 board set.
+This prototype uses three unique neutral safe templates:
 
-Assets:
-- index.html
-- assets/circuit-board-atlas.png (selected source image)
-- assets/circuit-board-3.png
-- assets/circuit-board-4.png
-- assets/circuit-board-6.png
+- `assets/circuit-board-3.png` — 3 sockets on the left + 3 on the right
+- `assets/circuit-board-4.png` — 4 sockets on the left + 4 on the right
+- `assets/circuit-board-6.png` — 6 sockets on the left + 6 on the right
 
-Notes:
-- The chosen boards are neutral hardware only.
-- Socket colors, status LEDs, animated wires, short flashes, and unlock effects are runtime overlays.
-- Terminal overlay positions were retuned to the actual socket centers of the selected 3 / 4 / 6 boards.
-- Mobile sizing remains compact, with portrait boards and touch targets preserved.
+## Runtime behavior
+
+- The artwork stays neutral/monochrome.
+- Wire/socket colors are added by JavaScript at runtime.
+- Matching order is randomized each new safe.
+- The blank top panel in each safe is used for live timer/info text.
+- Socket overlay coordinates are separately tuned for each unique safe image.
+- Existing short-circuit, mistakes, timer, wire animation, and unlock behavior remain active.

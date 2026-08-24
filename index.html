@@ -211,22 +211,11 @@ select,
   background:#06100b;
 }
 
-/*
-  Only the container ratio changes.
-  The actual PCB is now an IMG element,
-  not a CSS background.
-*/
-
-.board.easy{
-  aspect-ratio:435 / 558;
-}
-
-.board.normal{
-  aspect-ratio:420 / 682;
-}
-
+/* All three unique safe templates use the same 1086 × 1448 canvas. */
+.board.easy,
+.board.normal,
 .board.hard{
-  aspect-ratio:483 / 872;
+  aspect-ratio:1086 / 1448;
 }
 
 .boardBg{
@@ -262,6 +251,56 @@ select,
     );
 }
 
+/* ---------------- BOARD INFO HUD ---------------- */
+
+.boardInfo{
+  position:absolute;
+  z-index:7;
+  left:13%;
+  right:13%;
+  top:5.1%;
+  height:13.2%;
+  display:grid;
+  grid-template-columns:1.4fr .85fr .85fr;
+  gap:2.4%;
+  align-items:center;
+  pointer-events:none;
+  color:#e9efec;
+  text-shadow:0 1px 2px #000;
+}
+
+.boardInfoBlock{
+  min-width:0;
+}
+
+.boardInfoLabel{
+  font-size:clamp(7px,1.45vw,12px);
+  font-weight:900;
+  letter-spacing:.12em;
+  color:#9da8a3;
+}
+
+.boardInfoValue{
+  margin-top:2px;
+  font-size:clamp(12px,3.4vw,25px);
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.03em;
+}
+
+.boardInfoValue.small{
+  font-size:clamp(10px,2.5vw,19px);
+}
+
+.boardInfoHint{
+  margin-top:4px;
+  font-size:clamp(6px,1.25vw,10px);
+  color:#8f9994;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 /* ---------------- STATUS LIGHTS ---------------- */
 
 .statusRail{
@@ -270,7 +309,7 @@ select,
   z-index:5;
 
   left:50%;
-  top:5.8%;
+  top:22.2%;
 
   transform:translateX(-50%);
 
@@ -326,7 +365,7 @@ select,
 
   z-index:6;
 
-  width:clamp(44px,11.2%,70px);
+  width:clamp(38px,10.2%,64px);
 
   aspect-ratio:1;
 
@@ -873,11 +912,27 @@ class="board normal">
 <img
 id="boardBg"
 class="boardBg"
-src="./assets/circuit-board-4.png?v=5"
+src="./assets/circuit-board-4.png?v=6"
 alt=""
 draggable="false">
 
 <div class="boardShade"></div>
+
+<div class="boardInfo" aria-hidden="true">
+  <div class="boardInfoBlock">
+    <div class="boardInfoLabel">SAFE BYPASS</div>
+    <div id="boardMode" class="boardInfoValue small">4-WIRE CIRCUIT</div>
+    <div class="boardInfoHint">Match each left socket to its paired right socket.</div>
+  </div>
+  <div class="boardInfoBlock">
+    <div class="boardInfoLabel">TIME</div>
+    <div id="boardTimer" class="boardInfoValue">24.0</div>
+  </div>
+  <div class="boardInfoBlock">
+    <div class="boardInfoLabel">MATCHED / MISS</div>
+    <div id="boardProgress" class="boardInfoValue small">0 / 4 · 0</div>
+  </div>
+</div>
 
 <div
 id="statusRail"
@@ -1030,52 +1085,53 @@ Exact positions for the selected board artwork.
 
 const POS = {
 
-easy:{
-  leftX:18.0,
-  rightX:81.6,
-  ys:[
-    24.2,
-    46.9,
-    69.7
-  ]
-},
+  /* Coordinates are percentages of the 1086 × 1448 template canvas. */
+  easy:{
+    leftX:18.0,
+    rightX:82.0,
+    ys:[
+      36.8,
+      52.5,
+      68.8
+    ]
+  },
 
-normal:{
-  leftX:18.8,
-  rightX:81.9,
-  ys:[
-    18.8,
-    37.0,
-    55.1,
-    73.2
-  ]
-},
+  normal:{
+    leftX:18.0,
+    rightX:83.0,
+    ys:[
+      28.4,
+      43.3,
+      58.4,
+      73.6
+    ]
+  },
 
-hard:{
-  leftX:18.0,
-  rightX:82.2,
-  ys:[
-    14.6,
-    28.1,
-    41.3,
-    54.4,
-    67.6,
-    81.0
-  ]
-}
+  hard:{
+    leftX:18.4,
+    rightX:81.7,
+    ys:[
+      32.9,
+      41.7,
+      50.8,
+      59.9,
+      69.0,
+      78.0
+    ]
+  }
 
 };
 
 const BOARD_IMAGES = {
 
 easy:
-  "./assets/circuit-board-3.png?v=5",
+  "./assets/circuit-board-3.png?v=6",
 
 normal:
-  "./assets/circuit-board-4.png?v=5",
+  "./assets/circuit-board-4.png?v=6",
 
 hard:
-  "./assets/circuit-board-6.png?v=5"
+  "./assets/circuit-board-6.png?v=6"
 
 };
 
@@ -1695,6 +1751,10 @@ function updateTimer(){
         .toFixed(1) +
       "s";
 
+  $("boardTimer")
+    .textContent =
+      seconds.toFixed(1);
+
   $("timer")
     .classList
     .toggle(
@@ -1848,6 +1908,12 @@ function updateUI(){
   $("matched")
     .textContent =
       `${connected.size} / ${wires.length}`;
+
+  $("boardMode").textContent =
+    `${wires.length}-WIRE CIRCUIT`;
+
+  $("boardProgress").textContent =
+    `${connected.size} / ${wires.length} · ${mistakeCount}`;
 
   $("mistakes")
     .textContent =
