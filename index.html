@@ -258,8 +258,8 @@ select,
   z-index:7;
   left:13%;
   right:13%;
-  top:5.1%;
-  height:13.2%;
+  top:7.4%;
+  height:11.2%;
   display:grid;
   grid-template-columns:1.4fr .85fr .85fr;
   gap:2.4%;
@@ -357,6 +357,16 @@ select,
     transform:scale(1.12);
   }
 }
+
+/* Each generated safe has a different header shape, so keep the live HUD
+   inside the actual blank metal/info area for that image. */
+.board.easy .boardInfo{top:7.3%;height:11.6%;}
+.board.normal .boardInfo{top:6.7%;height:9.2%;}
+.board.hard .boardInfo{top:7.1%;height:12.6%;}
+
+.board.easy .statusRail{top:22.4%;}
+.board.normal .statusRail{top:18.5%;}
+.board.hard .statusRail{top:23.4%;}
 
 /* ---------------- TERMINALS ---------------- */
 
@@ -801,7 +811,6 @@ select,
   }
 
   .statusRail{
-    top:5%;
     gap:3px;
   }
 
@@ -912,7 +921,7 @@ class="board normal">
 <img
 id="boardBg"
 class="boardBg"
-src="./assets/circuit-board-4.png?v=6"
+src="assets/circuit-board-4.png"
 alt=""
 draggable="false">
 
@@ -1085,55 +1094,57 @@ Exact positions for the selected board artwork.
 
 const POS = {
 
-  /* Coordinates are percentages of the 1086 × 1448 template canvas. */
+  /* Calibrated against the socket centres in the three 1086 × 1448 PNGs. */
   easy:{
-    leftX:18.0,
-    rightX:82.0,
+    leftX:17.05,
+    rightX:82.95,
     ys:[
-      36.8,
-      52.5,
-      68.8
+      37.15,
+      52.45,
+      69.30
     ]
   },
 
   normal:{
-    leftX:18.0,
-    rightX:83.0,
+    leftX:17.35,
+    rightX:82.75,
     ys:[
-      28.4,
-      43.3,
-      58.4,
-      73.6
+      28.55,
+      43.30,
+      58.70,
+      73.95
     ]
   },
 
   hard:{
-    leftX:18.4,
-    rightX:81.7,
+    leftX:18.25,
+    rightX:81.75,
     ys:[
-      32.9,
-      41.7,
-      50.8,
-      59.9,
-      69.0,
-      78.0
+      32.60,
+      41.45,
+      50.60,
+      59.75,
+      68.90,
+      78.05
     ]
   }
 
 };
 
+const assetURL =
+  file => new URL(file, document.baseURI).href;
+
 const BOARD_IMAGES = {
-
-easy:
-  "./assets/circuit-board-3.png?v=6",
-
-normal:
-  "./assets/circuit-board-4.png?v=6",
-
-hard:
-  "./assets/circuit-board-6.png?v=6"
-
+  easy: assetURL("assets/circuit-board-3.png"),
+  normal: assetURL("assets/circuit-board-4.png"),
+  hard: assetURL("assets/circuit-board-6.png")
 };
+
+/* Preload every board once so switching difficulties never races the image. */
+Object.values(BOARD_IMAGES).forEach(src => {
+  const img = new Image();
+  img.src = src;
+});
 
 let wires = [];
 
@@ -1198,31 +1209,31 @@ function shuffle(array){
 
 function setBoardImage(){
 
-  const m =
-    mode();
+  const m = mode();
+  const image = $("boardBg");
+  const src = BOARD_IMAGES[m];
 
-  const image =
-    $("boardBg");
+  image.onload = () => {
+    image.style.visibility = "visible";
+  };
 
-  /*
-  Setting src every reset also helps Safari/GitHub
-  refresh the actual asset.
-  */
+  image.onerror = () => {
+    image.style.visibility = "hidden";
+    setMessage(
+      "Could not load " + src,
+      false
+    );
+  };
 
-  image.src =
-    BOARD_IMAGES[m];
+  image.style.visibility = "visible";
 
-  image.onerror =
-    () => {
-
-      setMessage(
-        "Board image missing: assets/circuit-board-" +
-        cfg().count +
-        ".png",
-        false
-      );
-
-    };
+  /* Do not add cache-busting query strings: relative asset URLs work both
+     from a local index.html and from a GitHub Pages project path. */
+  if (image.src !== src) {
+    image.src = src;
+  } else if (image.complete && image.naturalWidth === 0) {
+    image.src = src;
+  }
 
 }
 
